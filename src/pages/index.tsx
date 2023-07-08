@@ -19,7 +19,7 @@ export default function Home({ session }: any) {
                 referrerPolicy="no-referrer"
                 className="rounded w-6 h-6"
               />
-              <span className="">Vinícius's Notes</span>
+              <span className="">Vinícius&apos;s Notes</span>
             </div>
             <div>
               <div className="mt-6 gap-2 flex justify-between items-center text-sm cursor-pointer hover:bg-zinc-700 px-6 py-2 text-zinc-400">
