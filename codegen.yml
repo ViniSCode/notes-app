@@ -1,0 +1,18 @@
+overwrite: true
+
+schema: "https://api-sa-east-1.hygraph.com/v2/clh4y479g5mig01taa2s5djfl/master"
+
+documents: "./src/graphql/**/*.graphql"
+
+generates:
+  src/generated/graphql.tsx:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-urql"
+    config:
+      withHooks: true
+
+hooks:
+  afterAllFileWrite:
+    - eslint --fix
