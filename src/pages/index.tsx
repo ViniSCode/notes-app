@@ -1,6 +1,7 @@
 import Editor from "@/components/Editor/index";
 import type { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
+import Image from "next/image";
 import { FiFileText, FiTrash } from "react-icons/fi";
 
 export default function Home({ session }: any) {
@@ -10,9 +11,12 @@ export default function Home({ session }: any) {
         <div className="overflow-hidden bg-zinc-900 border-r border-r-zinc-700">
           <aside className="fixed w-[16rem] ">
             <div className="flex gap-4 group items-center px-6 py-6">
-              <img
-                src="https://github.com/viniscode.png"
+              <Image
+                src="https://lh3.googleusercontent.com/a-/AOh14GhL-wIhtHTZsei8k_MhcdQCQAtpnoFNbMm4BRBp=s96-c"
                 alt="Vinícius Rodrigues"
+                width={100}
+                height={100}
+                referrerPolicy="no-referrer"
                 className="rounded w-6 h-6"
               />
               <span className="">Vinícius's Notes</span>
