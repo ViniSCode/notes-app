@@ -1,3 +1,7 @@
+export function test() {
+  return;
+}
+
 // import { cacheExchange, createClient, fetchExchange, ssrExchange } from "urql";
 // const isServerSide = typeof window === "undefined";
 // const ssrCache = ssrExchange({ isClient: !isServerSide });
