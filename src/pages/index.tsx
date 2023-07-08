@@ -6,8 +6,8 @@ import { FiFileText, FiTrash } from "react-icons/fi";
 
 export default function Home({ session }: any) {
   return (
-    <div className="min-h-full text-zinc-50">
-      <div className="mx-auto overflow-hidden w-full shadow-md bg-zinc-800 border-black/20 break-words grid grid-cols-[16rem_1fr]">
+    <div className="min-h-screen text-zinc-50">
+      <div className="min-h-screen mx-auto overflow-hidden w-full shadow-md bg-zinc-800 border-black/20 break-words grid grid-cols-[16rem_1fr]">
         <div className="overflow-hidden bg-zinc-900 border-r border-r-zinc-700">
           <aside className="fixed w-[16rem] ">
             <div className="flex gap-4 group items-center px-6 py-6">

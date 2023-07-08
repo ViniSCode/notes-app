@@ -10,5 +10,5 @@
 
 body {
   -webkit-font-smoothing: antialiased;
-  @apply bg-gradient-to-r from-yellow-200 via-pink-200 to-pink-400 font-poppins min-h-full;
+  @apply bg-gradient-to-r from-zinc-900 min-h-full;
 }
