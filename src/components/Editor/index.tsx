@@ -76,16 +76,19 @@ function Editor(props: Props) {
             </BubbleButton>
             <BubbleButton
               onClick={() => editor.chain().focus().toggleItalic().run()}
+              data-active={editor.isActive("italic")}
             >
               <RxFontItalic className="w-4 h-4" />
             </BubbleButton>
             <BubbleButton
               onClick={() => editor.chain().focus().toggleStrike().run()}
+              data-active={editor.isActive("strike")}
             >
               <RxStrikethrough className="w-4 h-4" />
             </BubbleButton>
             <BubbleButton
               onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+              data-active={editor.isActive("codeBlock")}
             >
               <RxCode className="w-4 h-4" />
             </BubbleButton>
