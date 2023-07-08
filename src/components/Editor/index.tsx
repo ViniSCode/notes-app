@@ -61,36 +61,36 @@ function Editor(props: Props) {
         >
           <BubbleButton onClick={() => {}}>
             Text
-            <RxChevronDown className="w-4 h-4" />
+            <RxChevronDown className="w-5 h-5" />
           </BubbleButton>
           <BubbleButton>
             Comment
-            <RxChatBubble className="w-4 h-4" />
+            <RxChatBubble className="w-5 h-5" />
           </BubbleButton>
           <div className="flex items-center">
             <BubbleButton
               onClick={() => editor.chain().focus().toggleBold().run()}
               data-active={editor.isActive("bold")}
             >
-              <RxFontBold className="w-4 h-4" />
+              <RxFontBold className="w-5 h-5" />
             </BubbleButton>
             <BubbleButton
               onClick={() => editor.chain().focus().toggleItalic().run()}
               data-active={editor.isActive("italic")}
             >
-              <RxFontItalic className="w-4 h-4" />
+              <RxFontItalic className="w-5 h-5" />
             </BubbleButton>
             <BubbleButton
               onClick={() => editor.chain().focus().toggleStrike().run()}
               data-active={editor.isActive("strike")}
             >
-              <RxStrikethrough className="w-4 h-4" />
+              <RxStrikethrough className="w-5 h-5" />
             </BubbleButton>
             <BubbleButton
               onClick={() => editor.chain().focus().toggleCodeBlock().run()}
               data-active={editor.isActive("codeBlock")}
             >
-              <RxCode className="w-4 h-4" />
+              <RxCode className="w-5 h-5" />
             </BubbleButton>
           </div>
         </BubbleMenu>
