@@ -36,17 +36,6 @@ module.exports = {
     },
 
     extend: {
-      gridTemplateColumns: {
-        ["map-grid"]: "auto 25rem",
-        ["map-grid-lg"]: "auto 25rem",
-        ["map-grid-xl"]: "auto 40rem",
-        ["share-plan"]: "50% 50%",
-        ["images"]: "auto 8.5rem",
-      },
-      backgroundImage: {
-        "navbar-blue-dark": "linear-gradient(180deg, #0C1E37 0%, black 100%)",
-      },
-
       fontFamily: {
         poppins: ["Poppins, sans-serif"],
       },
@@ -91,5 +80,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwind-scrollbar"), require("flowbite/plugin")],
+  plugins: [require("tailwind-scrollbar"), require("@tailwindcss/typography")],
 };
