@@ -55,7 +55,7 @@ export default function Home({ session }: any) {
     <div className="min-h-screen text-zinc-50">
       <div
         className={`relative min-h-screen mx-auto overflow-hidden w-full shadow-md bg-zinc-800 border-black/20 break-words ${
-          isSidebarOpen && "md:grid"
+          isSidebarOpen && "md:grid md:grid-cols-[16rem_auto]"
         }`}
       >
         {!isSidebarOpen && (
@@ -71,6 +71,8 @@ export default function Home({ session }: any) {
             </div>
           </div>
         )}
+
+        {isSidebarOpen && <div></div>}
         <motion.div
           initial={"closed"}
           animate={isSidebarOpen ? "open" : "closed"}
@@ -120,7 +122,7 @@ export default function Home({ session }: any) {
             </div>
           </aside>
         </motion.div>
-        <main className="md:ml-[16rem] px-20 py-4 mt-10 md:mt-0">
+        <main className="px-20 py-4 mt-10 md:mt-0">
           {isSidebarOpen && (
             <div className="flex items-center gap-4 mt-2">
               <div className="flex gap-2 items-center">
