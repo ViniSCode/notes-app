@@ -55,11 +55,11 @@ export default function Home({ session }: any) {
     <div className="min-h-screen text-zinc-50">
       <div
         className={`relative min-h-screen mx-auto overflow-hidden w-full shadow-md bg-zinc-800 border-black/20 break-words ${
-          isSidebarOpen && "md:grid md:grid-cols-[16rem_1fr]"
+          isSidebarOpen && "md:grid"
         }`}
       >
         {!isSidebarOpen && (
-          <div className="flex items-center gap-4 mt-6">
+          <div className="fixed z-[90] bg-zinc-800 w-full flex items-center gap-4 pt-6 pb-6 bg-800">
             <FiChevronsRight
               className="absolute w-6 h-6 z-40 left-4  text-zinc-400 hover:bg-zinc-700 rounded-sm p-0.5 cursor-pointer"
               onClick={() => setIsSidebarOpen(true)}
@@ -75,15 +75,10 @@ export default function Home({ session }: any) {
           initial={"closed"}
           animate={isSidebarOpen ? "open" : "closed"}
           variants={sidebarVariants}
-          className="hidden md:block overflow-hidden bg-zinc-900 border-r border-r-zinc-700"
+          className="fixed overflow-hidden min-h-full z-50 bg-zinc-900 border-r border-r-zinc-700 w-[16rem] min-w-[16rem]"
         >
-          <motion.aside
-            initial="closed"
-            animate="open"
-            variants={itemVariants}
-            className="fixed w-[16rem]"
-          >
-            <motion.div className="flex gap-4 group justify-between items-center px-6 py-6">
+          <aside className="static w-[16rem] min-w-[16rem]">
+            <div className="flex gap-4 group justify-between items-center px-6 py-6">
               <div className="flex gap-4 group items-center">
                 <Image
                   src="https://lh3.googleusercontent.com/a-/AOh14GhL-wIhtHTZsei8k_MhcdQCQAtpnoFNbMm4BRBp=s96-c"
@@ -100,17 +95,17 @@ export default function Home({ session }: any) {
                 className="w-6 h-6 text-zinc-400 hover:bg-zinc-700 rounded-sm p-0.5 cursor-pointer"
                 onClick={() => setIsSidebarOpen(false)}
               />
-            </motion.div>
-            <motion.div className="flex flex-col gap-0.5 px-2">
+            </div>
+            <div className="flex flex-col gap-0.5 px-2">
               {links &&
                 links.map((link) => (
-                  <motion.div className="first:mt-6 first:bg-zinc-700 gap-2 flex justify-between items-center text-sm cursor-pointer bg-zinc-900 hover:bg-zinc-600 px-6 py-1 font-medium text-white rounded-sm transition-colors">
+                  <div className="first:mt-6 first:bg-zinc-700 gap-2 flex justify-between items-center text-sm cursor-pointer bg-zinc-900 hover:bg-zinc-600 px-6 py-1 font-medium text-white rounded-sm transition-colors">
                     <div className="flex gap-2 items-center">
                       <FiFileText className="w-4 h-4 text-zinc-400" />
                       <span>{link.name}</span>
                     </div>
                     <FiTrash className="w-4 h-4 text-zinc-400" />
-                  </motion.div>
+                  </div>
                 ))}
 
               <div className="mt-1 gap-2 flex justify-between items-center text-sm cursor-pointer hover:bg-zinc-600 px-6 py-1 text-zinc-400 rounded-sm transition-colors">
@@ -119,10 +114,10 @@ export default function Home({ session }: any) {
                   <span className="font-medium">Add a page</span>
                 </div>
               </div>
-            </motion.div>
-          </motion.aside>
+            </div>
+          </aside>
         </motion.div>
-        <main className="px-20 py-4">
+        <main className="md:ml-[16rem] px-20 py-4 mt-10 md:mt-0">
           {isSidebarOpen && (
             <div className="flex items-center gap-4 mt-2">
               <div className="flex gap-2 items-center">
