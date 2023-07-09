@@ -98,8 +98,11 @@ export default function Home({ session }: any) {
             </div>
             <div className="flex flex-col gap-0.5 px-2">
               {links &&
-                links.map((link) => (
-                  <div className="first:mt-6 first:bg-zinc-700 gap-2 flex justify-between items-center text-sm cursor-pointer bg-zinc-900 hover:bg-zinc-600 px-6 py-1 font-medium text-white rounded-sm transition-colors">
+                links.map((link, index) => (
+                  <div
+                    key={index}
+                    className="first:mt-6 first:bg-zinc-700 gap-2 flex justify-between items-center text-sm cursor-pointer bg-zinc-900 hover:bg-zinc-600 px-6 py-1 font-medium text-white rounded-sm transition-colors"
+                  >
                     <div className="flex gap-2 items-center">
                       <FiFileText className="w-4 h-4 text-zinc-400" />
                       <span>{link.name}</span>
