@@ -26,12 +26,12 @@ export default function Home({ session }: any) {
               <FiChevronsLeft className="w-6 h-6 text-zinc-400 hover:bg-zinc-700 rounded-sm p-0.5 cursor-pointer" />
             </div>
             <div className="flex flex-col gap-0.5 px-2">
-              <div className="mt-6 gap-2 flex justify-between items-center text-sm cursor-pointer bg-zinc-700 hover:bg-zinc-600 px-6 py-1 text-zinc-400 rounded-sm transition-colors">
+              <div className="mt-6 gap-2 flex justify-between items-center text-sm cursor-pointer bg-zinc-700 hover:bg-zinc-600 px-6 py-1 font-medium text-white rounded-sm transition-colors">
                 <div className="flex gap-2 items-center">
-                  <FiFileText className="w-4 h-4" />
+                  <FiFileText className="w-4 h-4 text-zinc-400" />
                   <span>TailwindCSS</span>
                 </div>
-                <FiTrash className="w-4 h-4" />
+                <FiTrash className="w-4 h-4 text-zinc-400" />
               </div>
 
               <div className="gap-2 flex justify-between items-center text-sm cursor-pointer hover:bg-zinc-600 px-6 py-1 text-zinc-400 rounded-sm transition-colors">
