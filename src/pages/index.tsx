@@ -17,23 +17,23 @@ export default function Home({ session }: any) {
 
   const links = [
     {
-      name: "Tailwindcss",
+      name: "New Note",
     },
-    {
-      name: "Untitled",
-    },
-    {
-      name: "Untitled",
-    },
-    {
-      name: "Untitled",
-    },
-    {
-      name: "Untitled",
-    },
-    {
-      name: "Untitled",
-    },
+    // {
+    //   name: "Untitled",
+    // },
+    // {
+    //   name: "Untitled",
+    // },
+    // {
+    //   name: "Untitled",
+    // },
+    // {
+    //   name: "Untitled",
+    // },
+    // {
+    //   name: "Untitled",
+    // },
   ];
 
   const itemVariants = {
@@ -131,7 +131,6 @@ export default function Home({ session }: any) {
               </div>
             </div>
           )}
-
           <Editor />
         </main>
       </div>
