@@ -1,6 +1,6 @@
 overwrite: true
 
-schema: "https://api-sa-east-1.hygraph.com/v2/clh4y479g5mig01taa2s5djfl/master"
+schema: "https://api-sa-east-1.hygraph.com/v2/clk011n8m0qlj01uh4a4ngtem/master"
 
 documents: "./src/graphql/**/*.graphql"
 
