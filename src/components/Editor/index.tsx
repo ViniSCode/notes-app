@@ -117,7 +117,7 @@ function Editor(props: Props) {
 
             return currentLineText === "/";
           }}
-          className="bg-zinc-700 shadow-xl border border-zinc-600 shadow-black/20 rounded-lg overflow-hidden flex flex-col py-2 px-1 gap-1"
+          className="relative max-w-[200px] xs:max-w-full -left-2.5 md:left-0 top-48 bg-zinc-700 shadow-xl border border-zinc-600 shadow-black/20 rounded-lg overflow-hidden flex flex-col py-2 px-1 gap-1"
         >
           <button
             className="flex items-center gap-2 p-1 rounded min-w-[280px] hover:bg-zinc-600"
@@ -130,8 +130,8 @@ function Editor(props: Props) {
             />
             <div className="flex flex-col text-left">
               <span className="text-sm">Text</span>
-              <span className="text-xs text-zinc-400">
-                Just start writing with plain text.
+              <span className="md:hidden block text-xs text-zinc-400">
+                Start with Plain text.
               </span>
             </div>
           </button>
@@ -167,7 +167,7 @@ function Editor(props: Props) {
             <div className="flex flex-col text-left">
               <span className="text-sm">Bulleted list</span>
               <span className="text-xs text-zinc-400">
-                Create a simple bulleted list.
+                Simple bulleted list.
               </span>
             </div>
           </button>
@@ -184,7 +184,7 @@ function Editor(props: Props) {
             <div className="flex flex-col text-left">
               <span className="text-sm">Numbered list</span>
               <span className="text-xs text-zinc-400">
-                Create a list with numbering.
+                Simple numbered list
               </span>
             </div>
           </button>

@@ -122,7 +122,7 @@ export default function Home({ session }: any) {
             </div>
           </aside>
         </motion.div>
-        <main className="px-20 py-4 mt-10 md:mt-0">
+        <main className="px-8 md:px-20 py-4 mt-10 md:mt-0">
           {isSidebarOpen && (
             <div className="flex items-center gap-4 mt-2">
               <div className="flex gap-2 items-center">
