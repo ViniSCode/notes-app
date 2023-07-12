@@ -97,7 +97,7 @@ function Editor(props: Props) {
 
   return (
     <div
-      className="w-full h-full"
+      className="w-full h-full min-h-screen min-w-full editor-container"
       onClick={() => {
         if (editor) {
           editor.chain().focus().run();
