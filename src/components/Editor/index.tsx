@@ -1,5 +1,4 @@
 "use client";
-import { initialNote } from "@/utils/initialNote";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import {
   BubbleMenu,
@@ -23,6 +22,7 @@ import {
 } from "react-icons/rx";
 import { TfiMarkerAlt } from "react-icons/tfi";
 
+import { Note } from "@/pages";
 import Heading from "@tiptap/extension-heading";
 import Highlight from "@tiptap/extension-highlight";
 import Image from "@tiptap/extension-image";
@@ -32,7 +32,9 @@ import { lowlight } from "lowlight";
 import { useEffect } from "react";
 import { BubbleButton } from "./BubbleButton";
 
-interface Props {}
+interface Props {
+  note: Note;
+}
 
 lowlight.registerLanguage("html", html);
 lowlight.registerLanguage("css", css);
@@ -72,7 +74,7 @@ function Editor(props: Props) {
         },
       }),
     ],
-    content: initialNote,
+    content: props.note.content,
     editorProps: {
       attributes: {
         class: "outline-none",
@@ -94,6 +96,10 @@ function Editor(props: Props) {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
+
+  useEffect(() => {
+    editor?.chain().setContent(props.note.content).run();
+  }, [props.note.content]);
 
   return (
     <div
