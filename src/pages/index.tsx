@@ -46,7 +46,7 @@ export default function Home({ session }: any) {
   const sidebarVariants = {
     closed: {
       opacity: 0,
-      x: -200,
+      x: -300,
     },
     open: { opacity: 1, x: 0 },
   };
