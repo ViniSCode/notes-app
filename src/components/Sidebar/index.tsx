@@ -1,7 +1,8 @@
 import { Note } from "@/pages";
 import { motion } from "framer-motion";
-import Image from "next/image";
+import { Session } from "next-auth";
 import { FiChevronsLeft, FiFileText, FiPlus, FiTrash } from "react-icons/fi";
+import ProfileDropdown from "../LogoutDropdown";
 
 interface SidebarProps {
   isSidebarOpen: boolean;
@@ -9,6 +10,7 @@ interface SidebarProps {
   notes: Note[];
   setCurrentSelectedNote: any;
   currentSelectedNote: any;
+  session: Session;
 }
 
 export function Sidebar({
@@ -17,6 +19,7 @@ export function Sidebar({
   notes,
   setCurrentSelectedNote,
   currentSelectedNote,
+  session,
 }: SidebarProps) {
   const sidebarVariants = {
     closed: {
@@ -35,17 +38,7 @@ export function Sidebar({
     >
       <aside className="static w-[16rem] min-w-[16rem]">
         <div className="flex gap-4 group justify-between items-center px-6 py-6">
-          <div className="flex gap-4 group items-center">
-            <Image
-              src="https://lh3.googleusercontent.com/a-/AOh14GhL-wIhtHTZsei8k_MhcdQCQAtpnoFNbMm4BRBp=s96-c"
-              alt="Vinícius Rodrigues"
-              width={100}
-              height={100}
-              referrerPolicy="no-referrer"
-              className="rounded w-6 h-6"
-            />
-            <span className="">Vinícius&apos;s Notes</span>
-          </div>
+          <ProfileDropdown session={session} />
 
           <FiChevronsLeft
             className="w-6 h-6 text-zinc-400 hover:bg-zinc-700 rounded-sm p-0.5 cursor-pointer"

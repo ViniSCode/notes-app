@@ -66,6 +66,7 @@ export default function Home({ session }: any) {
           notes={notes}
           isSidebarOpen={isSidebarOpen}
           setIsSidebarOpen={setIsSidebarOpen}
+          session={session}
         />
         <main className="px-8 md:px-20 py-4 mt-10 md:mt-0">
           {isSidebarOpen && (
@@ -87,6 +88,15 @@ export default function Home({ session }: any) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
 
   return {
     props: {
