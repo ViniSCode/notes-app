@@ -37,11 +37,11 @@ export function Sidebar({
       className="fixed overflow-hidden min-h-full z-50 bg-zinc-900 border-r border-r-zinc-700 w-[16rem] min-w-[16rem]"
     >
       <aside className="static w-[16rem] min-w-[16rem]">
-        <div className="flex gap-4 group justify-between items-center px-6 py-6">
+        <div className="flex relative gap-4 group justify-between items-center">
           <ProfileDropdown session={session} />
 
           <FiChevronsLeft
-            className="w-6 h-6 text-zinc-400 hover:bg-zinc-700 rounded-sm p-0.5 cursor-pointer"
+            className="absolute right-6 top-[22px] w-7 h-7 text-zinc-400 hover:bg-zinc-700 rounded-sm p-0.5 cursor-pointer"
             onClick={() => setIsSidebarOpen(false)}
           />
         </div>

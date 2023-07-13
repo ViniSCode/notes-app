@@ -8,7 +8,7 @@ interface UserAvatarProps {
 
 export function UserAvatar({ avatar, name }: UserAvatarProps) {
   return (
-    <div className="flex gap-4 items-center">
+    <div className="flex gap-3 items-center">
       <Avatar.Root className="bg-blackA3 inline-flex w-6 h-6 rounded select-none items-center justify-center overflow-hidden align-middle">
         <Avatar.Image
           className="h-full w-full rounded-[inherit] object-cover"
@@ -22,7 +22,7 @@ export function UserAvatar({ avatar, name }: UserAvatarProps) {
           {name && abbreviateName(name).abbreviate}
         </Avatar.Fallback>
       </Avatar.Root>
-      <span className="font-medium">
+      <span className="font-medium text-sm">
         {name && abbreviateName(name).firstName}&apos;s Notes
       </span>
     </div>
