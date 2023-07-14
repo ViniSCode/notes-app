@@ -29,7 +29,7 @@ import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import { lowlight } from "lowlight";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BubbleButton } from "./BubbleButton";
 
 interface Props {
@@ -42,6 +42,8 @@ lowlight.registerLanguage("js", js);
 lowlight.registerLanguage("ts", ts);
 
 function Editor(props: Props) {
+  const [isUploadImageModalOpen, setIsUploadImageModalOpen] = useState(false);
+
   const editor = useEditor({
     autofocus: "end",
     extensions: [
@@ -80,6 +82,10 @@ function Editor(props: Props) {
         class: "outline-none",
       },
     },
+    onUpdate: ({ editor }) => {},
+    onBlur: ({ editor }) => {
+      setIsUploadImageModalOpen(false);
+    },
   });
 
   useEffect(() => {
@@ -112,17 +118,19 @@ function Editor(props: Props) {
     >
       <EditorContent
         editor={editor}
-        className="max-w-[700px] mx-auto pt-16 prose prose-violet prose-pre:whitespace-pre-wrap prose-invert"
+        className="relative max-w-[700px] mx-auto pt-16 prose prose-violet prose-pre:whitespace-pre-wrap prose-invert"
       />
+
       {editor && (
         <FloatingMenu
           editor={editor}
           shouldShow={({ state }) => {
             const { $from } = state.selection;
-            const currentLineText = $from.nodeBefore?.textContent;
+            const currentLineText = $from.nodeBefore?.textContent === "/";
 
-            return currentLineText === "/";
+            return currentLineText && editor.isFocused;
           }}
+          tippyOptions={{ zIndex: 40 }}
           className="relative max-w-[200px] xs:max-w-full -left-2.5 md:left-0 top-48 bg-zinc-700 shadow-xl border border-zinc-600 shadow-black/20 rounded-lg overflow-hidden flex flex-col py-2 px-1 gap-1"
         >
           <button
@@ -207,6 +215,18 @@ function Editor(props: Props) {
             <div className="flex flex-col text-left">
               <span className="text-sm">Quote</span>
               <span className="text-xs text-zinc-400">Capture a quote.</span>
+            </div>
+          </button>
+
+          <button className="flex items-center gap-2 p-1 rounded min-w-[280px] hover:bg-zinc-600">
+            <img
+              src="https://www.notion.so/images/blocks/image.33d80a98.png"
+              alt="Text"
+              className="w-12 border border-zinc-600 rounded"
+            />
+            <div className="flex flex-col text-left">
+              <span className="text-sm">Image</span>
+              <span className="text-xs text-zinc-400">Upload or embed</span>
             </div>
           </button>
         </FloatingMenu>
