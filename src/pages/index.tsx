@@ -75,7 +75,7 @@ export default function Home({ session }: any) {
           />
           <main className="px-8 md:px-20 py-4 mt-10 md:mt-0">
             {isSidebarOpen && (
-              <div className="flex items-center gap-4 mt-2">
+              <div className="select-none flex items-center gap-4 mt-2">
                 <div className="flex gap-2 items-center">
                   <FiFileText className="w-4 h-4 text-zinc-400" />
                   <span>{notes[0]?.name}</span>
