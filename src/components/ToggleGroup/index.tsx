@@ -16,7 +16,7 @@ interface EditorToggleGroupProps {
 }
 const EditorToggleGroup = (props: EditorToggleGroupProps) => (
   <ToggleGroup.Root
-    className="inline-flex bg-mauve6 rounded shadow-[0_2px_10px] shadow-blackA7 space-x-px"
+    className="inline-flex bg-zinc-700 rounded shadow-[0_2px_10px] shadow-blackA7 space-x-px"
     type="single"
     defaultValue="center"
     aria-label="Text alignment"

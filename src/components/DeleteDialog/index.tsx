@@ -9,12 +9,12 @@ const DeleteDialog = () => (
       </button>
     </AlertDialog.Trigger>
     <AlertDialog.Portal>
-      <AlertDialog.Overlay className="z-[90] bg-black/30 data-[state=open]:animate-overlayShow fixed inset-0" />
+      <AlertDialog.Overlay className="z-[90] bg-black/50 data-[state=open]:animate-overlayShow fixed inset-0" />
       <AlertDialog.Content className="bg-zinc-700 z-[100] data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[500px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] p-[25px] shadow focus:outline-none">
         <AlertDialog.Title className="text-zinc-50 m-0 text-[17px] font-medium">
           Are you absolutely sure?
         </AlertDialog.Title>
-        <AlertDialog.Description className="text-zinc-50 mt-4 mb-5 text-[15px] leading-normal">
+        <AlertDialog.Description className="text-zinc-300 mt-4 mb-5 text-[15px] leading-normal">
           This action cannot be undone. This will permanently delete your note
           removing it from our servers.
         </AlertDialog.Description>

@@ -1,5 +1,11 @@
 "use client";
+import { Note } from "@/pages";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import Heading from "@tiptap/extension-heading";
+import Highlight from "@tiptap/extension-highlight";
+import Image from "@tiptap/extension-image";
+import Link from "@tiptap/extension-link";
+import Placeholder from "@tiptap/extension-placeholder";
 import {
   BubbleMenu,
   EditorContent,
@@ -12,17 +18,10 @@ import js from "highlight.js/lib/languages/javascript";
 import ts from "highlight.js/lib/languages/typescript";
 import html from "highlight.js/lib/languages/xml";
 import "highlight.js/styles/tokyo-night-dark.css";
-
-import EditorToggleGroup from "@/ToggleGroup";
-import { Note } from "@/pages";
-import Heading from "@tiptap/extension-heading";
-import Highlight from "@tiptap/extension-highlight";
-import Image from "@tiptap/extension-image";
-import Link from "@tiptap/extension-link";
-import Placeholder from "@tiptap/extension-placeholder";
 import { lowlight } from "lowlight";
 import { useEffect, useState } from "react";
 import { AccessibleFloatingMenu } from "../FloatingMenu";
+import EditorToggleGroup from "../ToggleGroup";
 
 interface Props {
   note: Note;
@@ -104,6 +103,10 @@ function Editor(props: Props) {
       className="w-full h-full min-h-screen min-w-full editor-container"
       onClick={() => {
         if (editor) {
+          const isText = editor.state.selection.$from.nodeBefore?.isText;
+          if (isText) {
+            editor.chain().focus().setHardBreak().run();
+          }
           editor.chain().focus().run();
         }
       }}
