@@ -28,7 +28,7 @@ export function ImageUploadTab() {
         value="tab1"
       >
         <p className="mb-5 text-zinc-50 text-[15px] leading-normal">
-          Make changes to your account here. Click save when you're done.
+          Make changes to your account here. Click save when you&apos;re done.
         </p>
         <fieldset className="mb-[15px] w-full flex flex-col justify-start">
           <label
@@ -56,7 +56,7 @@ export function ImageUploadTab() {
         value="tab2"
       >
         <p className="mb-5 text-zinc-50 text-[15px] leading-normal">
-          Change your password here. After saving, you'll be logged out.
+          Change your password here. After saving, you&apos;ll be logged out.
         </p>
         <fieldset className="mb-[15px] w-full flex flex-col justify-start">
           <label

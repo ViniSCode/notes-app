@@ -1,7 +1,8 @@
 import { Note } from "@/pages";
 import { motion } from "framer-motion";
 import { Session } from "next-auth";
-import { FiChevronsLeft, FiFileText, FiPlus, FiTrash } from "react-icons/fi";
+import { FiChevronsLeft, FiFileText, FiPlus } from "react-icons/fi";
+import DeleteDialog from "../DeleteDialog";
 import ProfileDropdown from "../LogoutDropdown";
 
 interface SidebarProps {
@@ -58,7 +59,7 @@ export function Sidebar({
                   <FiFileText className="w-4 h-4 text-zinc-400" />
                   <span>{note.name}</span>
                 </div>
-                <FiTrash className="w-4 h-4 text-zinc-400" />
+                <DeleteDialog />
               </div>
             ))}
 

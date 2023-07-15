@@ -2,6 +2,7 @@ import Editor from "@/components/Editor/index";
 import { Sidebar } from "@/components/Sidebar";
 import type { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
+import Head from "next/head";
 import { useEffect, useState } from "react";
 import { FiChevronsRight, FiFileText } from "react-icons/fi";
 import { initialNote } from "../utils/initialNote";
@@ -38,51 +39,56 @@ export default function Home({ session }: any) {
   function handleCreatePage() {}
 
   return (
-    <div className="min-h-screen text-zinc-50">
-      <div
-        className={`relative min-h-screen mx-auto overflow-hidden w-full shadow-md bg-zinc-800 border-black/20 break-words ${
-          isSidebarOpen && "md:grid md:grid-cols-[16rem_auto]"
-        }`}
-      >
-        {!isSidebarOpen && (
-          <div className="fixed z-[90] bg-zinc-800 w-full flex items-center gap-4 pt-6 pb-6 bg-800">
-            <FiChevronsRight
-              className="absolute w-6 h-6 z-40 left-4  text-zinc-400 hover:bg-zinc-700 rounded-sm p-0.5 cursor-pointer"
-              onClick={() => setIsSidebarOpen(true)}
-            />
+    <>
+      <Head>
+        <title>Noting | Notes App</title>
+      </Head>
+      <div className="min-h-screen text-zinc-50">
+        <div
+          className={`relative min-h-screen mx-auto overflow-hidden w-full shadow-md bg-zinc-800 border-black/20 break-words ${
+            isSidebarOpen && "md:grid md:grid-cols-[16rem_auto]"
+          }`}
+        >
+          {!isSidebarOpen && (
+            <div className="fixed z-[90] bg-zinc-800 w-full flex items-center gap-4 pt-6 pb-6 bg-800">
+              <FiChevronsRight
+                className="absolute w-6 h-6 z-40 left-4  text-zinc-400 hover:bg-zinc-700 rounded-sm p-0.5 cursor-pointer"
+                onClick={() => setIsSidebarOpen(true)}
+              />
 
-            <div className="ml-16 flex gap-2 items-center">
-              <FiFileText className="w-4 h-4 text-zinc-400" />
-              <span>{notes[0]?.name}</span>
-            </div>
-          </div>
-        )}
-
-        {isSidebarOpen && <div></div>}
-
-        <Sidebar
-          currentSelectedNote={currentSelectedNote}
-          setCurrentSelectedNote={setCurrentSelectedNote}
-          notes={notes}
-          isSidebarOpen={isSidebarOpen}
-          setIsSidebarOpen={setIsSidebarOpen}
-          session={session}
-        />
-        <main className="px-8 md:px-20 py-4 mt-10 md:mt-0">
-          {isSidebarOpen && (
-            <div className="flex items-center gap-4 mt-2">
-              <div className="flex gap-2 items-center">
+              <div className="ml-16 flex gap-2 items-center">
                 <FiFileText className="w-4 h-4 text-zinc-400" />
                 <span>{notes[0]?.name}</span>
               </div>
             </div>
           )}
-          {notes && notes[currentSelectedNote] && (
-            <Editor note={notes[currentSelectedNote]} />
-          )}
-        </main>
+
+          {isSidebarOpen && <div></div>}
+
+          <Sidebar
+            currentSelectedNote={currentSelectedNote}
+            setCurrentSelectedNote={setCurrentSelectedNote}
+            notes={notes}
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+            session={session}
+          />
+          <main className="px-8 md:px-20 py-4 mt-10 md:mt-0">
+            {isSidebarOpen && (
+              <div className="flex items-center gap-4 mt-2">
+                <div className="flex gap-2 items-center">
+                  <FiFileText className="w-4 h-4 text-zinc-400" />
+                  <span>{notes[0]?.name}</span>
+                </div>
+              </div>
+            )}
+            {notes && notes[currentSelectedNote] && (
+              <Editor note={notes[currentSelectedNote]} />
+            )}
+          </main>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

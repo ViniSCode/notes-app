@@ -1,5 +1,6 @@
 import type { GetServerSideProps } from "next";
 import { getSession, signIn } from "next-auth/react";
+import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { AiFillGithub } from "react-icons/ai";
@@ -18,35 +19,40 @@ export default function Login({ session }: any) {
   }
 
   return (
-    <div className="min-h-screen min-w-full bg-zinc-900 flex items-center justify-center">
-      <div className="p-10 rounded">
-        <Image
-          width={200}
-          height={200}
-          quality={50}
-          className="rounded-full w-24 mx-auto"
-          src="/assets/noting-light.png"
-          alt="Noting Notes App"
-        />
-        <h1 className="text-zinc-50 text-3xl font-bold text-center mt-4">
-          Log in
-        </h1>
-        <button
-          className="mt-12 font-medium bg-zinc-800 text-zinc-300 rounded px-10 py-4 flex items-center gap-2 hover:bg-zinc-700 transition-colors"
-          onClick={handleLoginWithGoogle}
-        >
-          <FcGoogle size={22} />
-          Continue with Google
-        </button>
-        <button
-          onClick={handleLoginWithGitHub}
-          className="mt-4 font-medium bg-zinc-800 text-zinc-300 rounded px-10 py-4 flex items-center gap-2 hover:bg-zinc-700 transition-colors"
-        >
-          <AiFillGithub size={22} />
-          Continue with Github
-        </button>
+    <>
+      <Head>
+        <title>Noting | Log In</title>
+      </Head>
+      <div className="min-h-screen min-w-full bg-zinc-900 flex items-center justify-center">
+        <div className="p-10 rounded">
+          <Image
+            width={200}
+            height={200}
+            quality={50}
+            className="rounded-full w-24 mx-auto"
+            src="/assets/noting-light.png"
+            alt="Noting Notes App"
+          />
+          <h1 className="text-zinc-50 text-3xl font-bold text-center mt-4">
+            Log in
+          </h1>
+          <button
+            className="mt-12 font-medium bg-zinc-800 text-zinc-300 rounded px-10 py-4 flex items-center gap-2 hover:bg-zinc-700 transition-colors"
+            onClick={handleLoginWithGoogle}
+          >
+            <FcGoogle size={22} />
+            Continue with Google
+          </button>
+          <button
+            onClick={handleLoginWithGitHub}
+            className="mt-4 font-medium bg-zinc-800 text-zinc-300 rounded px-10 py-4 flex items-center gap-2 hover:bg-zinc-700 transition-colors"
+          >
+            <AiFillGithub size={22} />
+            Continue with Github
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
