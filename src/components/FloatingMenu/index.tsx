@@ -12,7 +12,16 @@ export function AccessibleFloatingMenu(props: AccessibleFloatingMenuProps) {
         <NavigationMenu.Item>
           <NavigationMenu.Trigger
             className="flex items-center gap-2 p-1 rounded min-w-[280px] hover:bg-zinc-600"
-            onClick={() => props.editor.chain().focus().setParagraph().run()}
+            onClick={() => {
+              const { $from } = props.editor.state.selection;
+              props.editor
+                .chain()
+                .focus()
+                .deleteRange({ from: $from.before() + 1, to: $from.end() })
+                .run();
+              props.editor.chain().focus().toggleHeading({ level: 1 }).run();
+              props.editor.chain().focus().setParagraph().run();
+            }}
           >
             <img
               src="http://www.notion.so/images/blocks/text/en-US.png"
@@ -32,6 +41,12 @@ export function AccessibleFloatingMenu(props: AccessibleFloatingMenuProps) {
           <NavigationMenu.Trigger
             className="flex items-center gap-2 p-1 rounded min-w-[280px] hover:bg-zinc-600"
             onClick={() => {
+              const { $from } = props.editor.state.selection;
+              props.editor
+                .chain()
+                .focus()
+                .deleteRange({ from: $from.before() + 1, to: $from.end() })
+                .run();
               props.editor.chain().focus().toggleHeading({ level: 1 }).run();
             }}
           >
@@ -52,9 +67,16 @@ export function AccessibleFloatingMenu(props: AccessibleFloatingMenuProps) {
         <NavigationMenu.Item>
           <NavigationMenu.Trigger
             className="flex items-center gap-2 p-1 rounded min-w-[280px] hover:bg-zinc-600"
-            onClick={() =>
-              props.editor.chain().focus().toggleBulletList().run()
-            }
+            onClick={() => {
+              const { $from } = props.editor.state.selection;
+              props.editor
+                .chain()
+                .focus()
+                .deleteRange({ from: $from.before() + 1, to: $from.end() })
+                .run();
+              props.editor.chain().focus().toggleHeading({ level: 1 }).run();
+              props.editor.chain().focus().toggleBulletList().run();
+            }}
           >
             <img
               src="http://www.notion.so/images/blocks/bulleted-list.0e87e917.png"
@@ -73,9 +95,16 @@ export function AccessibleFloatingMenu(props: AccessibleFloatingMenuProps) {
         <NavigationMenu.Item>
           <NavigationMenu.Trigger
             className="flex items-center gap-2 p-1 rounded min-w-[280px] hover:bg-zinc-600"
-            onClick={() =>
-              props.editor.chain().focus().toggleOrderedList().run()
-            }
+            onClick={() => {
+              const { $from } = props.editor.state.selection;
+              props.editor
+                .chain()
+                .focus()
+                .deleteRange({ from: $from.before() + 1, to: $from.end() })
+                .run();
+              props.editor.chain().focus().toggleHeading({ level: 1 }).run();
+              props.editor.chain().focus().toggleOrderedList().run();
+            }}
           >
             <img
               src="http://www.notion.so/images/blocks/numbered-list.0406affe.png"
@@ -94,9 +123,16 @@ export function AccessibleFloatingMenu(props: AccessibleFloatingMenuProps) {
         <NavigationMenu.Item>
           <NavigationMenu.Trigger
             className="flex items-center gap-2 p-1 rounded min-w-[280px] hover:bg-zinc-600"
-            onClick={() =>
-              props.editor.chain().focus().toggleBlockquote().run()
-            }
+            onClick={() => {
+              const { $from } = props.editor.state.selection;
+              props.editor
+                .chain()
+                .focus()
+                .deleteRange({ from: $from.before() + 1, to: $from.end() })
+                .run();
+              props.editor.chain().focus().toggleHeading({ level: 1 }).run();
+              props.editor.chain().focus().toggleBlockquote().run();
+            }}
           >
             <img
               src="https://www.notion.so/images/blocks/quote/en-US.png"
