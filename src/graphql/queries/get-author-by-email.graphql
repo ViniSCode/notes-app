@@ -1,0 +1,5 @@
+query GetAuthorByEmail($email: String!) {
+  authors(where: { email: $email }) {
+    id
+  }
+}

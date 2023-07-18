@@ -1,7 +1,7 @@
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { FiTrash } from "react-icons/fi";
 
-const DeleteDialog = () => (
+const DeleteDialog = ({ handleDeleteNote, id }: any) => (
   <AlertDialog.Root>
     <AlertDialog.Trigger asChild>
       <button className="w-6 h-6 flex items-center justify-center indent-[9999em] uppercase text-zinc-400 hover:text-zinc-300 rounded-sm hover:bg-zinc-500  transition-colors">
@@ -24,7 +24,7 @@ const DeleteDialog = () => (
               Cancel
             </button>
           </AlertDialog.Cancel>
-          <AlertDialog.Action asChild>
+          <AlertDialog.Action asChild onClick={() => handleDeleteNote(id)}>
             <button className="text-red11 bg-red4 hover:bg-red6 focus:shadow-red9 inline-flex h-[35px] items-center justify-center rounded-[4px] px-[15px] font-medium leading-none outline-none focus:shadow-[0_0_0_2px]">
               Yes, delete account
             </button>

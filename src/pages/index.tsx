@@ -5,7 +5,7 @@ import { getSession } from "next-auth/react";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { FiChevronsRight, FiFileText } from "react-icons/fi";
-import { initialNote } from "../utils/initialNote";
+import { v4 } from "uuid";
 
 export interface Note {
   name: string;
@@ -17,26 +17,53 @@ export default function Home({ session }: any) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [notes, setNotes] = useState<Note[]>([]);
   const [currentSelectedNote, setCurrentSelectedNote] = useState(0);
+  const [unsavedChanges, setUnsavedChanges] = useState(false); // Add this state variable
 
   useEffect(() => {
     setNotes([
       {
         name: "Untitled",
         id: "208hggjklsdafh204",
-        content: initialNote,
+        content: "<h1>Untitled</h1> <p></p>",
       },
       {
-        name: "Second Note",
-        id: "135634slkdfjklsda83",
-        content: `
-          <h1>Second Note</h1>
-          <p></p>
-        `,
+        name: "Untitled 2",
+        id: "208hggjklsdafh204sdfsdf",
+        content: "<h1>Untitled 2</h1> <p></p>",
       },
     ]);
   }, []);
 
-  function handleCreatePage() {}
+  function updateNoteContent(id: string, newContent: string) {
+    setNotes((prevNotes) =>
+      prevNotes.map((note) =>
+        note.id === id ? { ...note, content: newContent } : note
+      )
+    );
+
+    setUnsavedChanges(false);
+  }
+
+  function handleCreateNote() {
+    const newNote = {
+      name: "Untitled",
+      id: v4(),
+      content: "<h1>Untitled 2</h1> <p></p>",
+    };
+
+    setNotes((prevNotes) => [...prevNotes, newNote]);
+    setCurrentSelectedNote(notes.length); // Select the newly created note
+  }
+
+  function handleDeleteNote(noteId: string) {
+    // Filter out the note with the specified ID
+    setNotes((prevNotes) => prevNotes.filter((note) => note.id !== noteId));
+
+    // Select the previous note or the first note after deleting the current one
+    setCurrentSelectedNote((prevSelectedNote) =>
+      Math.max(prevSelectedNote - 1, 0)
+    );
+  }
 
   return (
     <>
@@ -72,6 +99,9 @@ export default function Home({ session }: any) {
             isSidebarOpen={isSidebarOpen}
             setIsSidebarOpen={setIsSidebarOpen}
             session={session}
+            unsavedChanges={unsavedChanges}
+            handleCreateNote={handleCreateNote}
+            handleDeleteNote={handleDeleteNote}
           />
           <main className="px-8 md:px-20 py-4 mt-10 md:mt-0">
             {isSidebarOpen && (
@@ -83,7 +113,11 @@ export default function Home({ session }: any) {
               </div>
             )}
             {notes && notes[currentSelectedNote] && (
-              <Editor note={notes[currentSelectedNote]} />
+              <Editor
+                note={notes[currentSelectedNote]}
+                updateNoteContent={updateNoteContent}
+                setUnsavedChanges={setUnsavedChanges}
+              />
             )}
           </main>
         </div>

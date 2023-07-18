@@ -1,0 +1,9 @@
+mutation CreateAuthor($email: String!, $name: String!) {
+  createAuthor(data: { email: $email, name: $name }) {
+    id
+  }
+
+  publishAuthor(where: { email: $email }) {
+    id
+  }
+}

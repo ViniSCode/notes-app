@@ -2,6 +2,7 @@ import { Note } from "@/pages";
 import { motion } from "framer-motion";
 import { Session } from "next-auth";
 import { FiChevronsLeft, FiFileText, FiPlus } from "react-icons/fi";
+import { toast } from "react-toastify";
 import DeleteDialog from "../DeleteDialog";
 import ProfileDropdown from "../LogoutDropdown";
 
@@ -12,6 +13,9 @@ interface SidebarProps {
   setCurrentSelectedNote: any;
   currentSelectedNote: any;
   session: Session;
+  unsavedChanges: boolean;
+  handleCreateNote: any;
+  handleDeleteNote: any;
 }
 
 export function Sidebar({
@@ -21,6 +25,9 @@ export function Sidebar({
   setCurrentSelectedNote,
   currentSelectedNote,
   session,
+  unsavedChanges,
+  handleCreateNote,
+  handleDeleteNote,
 }: SidebarProps) {
   const sidebarVariants = {
     closed: {
@@ -51,7 +58,13 @@ export function Sidebar({
             notes.map((note: any, index: any) => (
               <div
                 key={index}
-                onClick={() => setCurrentSelectedNote(index)}
+                onClick={() => {
+                  if (!unsavedChanges) {
+                    setCurrentSelectedNote(index);
+                  } else {
+                    toast.warning("Saving Changes", { autoClose: 4000 });
+                  }
+                }}
                 className="select-none first:mt-6 data-[active=true]:bg-zinc-700 gap-2 flex justify-between items-center text-sm cursor-pointer bg-zinc-900 hover:bg-zinc-600 px-6 py-1 font-medium text-white rounded-sm transition-colors"
                 data-active={currentSelectedNote === index}
               >
@@ -59,15 +72,15 @@ export function Sidebar({
                   <FiFileText className="w-4 h-4 text-zinc-400" />
                   <span>{note.name}</span>
                 </div>
-                <DeleteDialog />
+                <DeleteDialog
+                  handleDeleteNote={handleDeleteNote}
+                  id={note.id}
+                />
               </div>
             ))}
 
           <div className="mt-1 gap-2 flex justify-between items-center text-sm cursor-pointer hover:bg-zinc-600 px-6 py-1 text-zinc-400 rounded-sm transition-colors">
-            <div
-              className="flex gap-2 items-center"
-              onClick={() => notes.push()}
-            >
+            <div className="flex gap-2 items-center" onClick={handleCreateNote}>
               <FiPlus className="w-4 h-4" />
               <span className="font-medium">Add a page</span>
             </div>

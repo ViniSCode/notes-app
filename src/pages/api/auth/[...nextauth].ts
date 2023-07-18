@@ -1,5 +1,8 @@
-// import { UserAlreadyExistsDocument } from "@/generated/graphql";
-// import { client } from "@/lib/urql";
+import {
+  CreateAuthorDocument,
+  GetAuthorByEmailDocument,
+} from "@/generated/graphql";
+import { client } from "@/lib/urql";
 import NextAuth from "next-auth/next";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
@@ -18,20 +21,23 @@ export default NextAuth({
 
   callbacks: {
     async signIn({ user, account, profile }) {
-      // const email = user.email!;
-      // const avatar = user.image!;
-      // const name = user.name!;
+      const email = user.email!;
+      const avatar = user.image!;
+      const name = user.name!;
 
-      // const {
-      //   data: { members },
-      // } = await client.query(UserAlreadyExistsDocument, { email }).toPromise();
+      const {
+        data: { authors },
+      } = await client.query(GetAuthorByEmailDocument, { email }).toPromise();
 
-      // if (members.length === 0) {
-      //   // customer doesn't exists
-      //   await createMember(email!, avatar, name);
-      // } else {
-      //   // if customer exists
-      // }
+      if (authors.length === 0) {
+        // customer doesn't exists
+        await client
+          .mutation(CreateAuthorDocument, { email, name })
+          .toPromise();
+      } else {
+        // if customer exists
+        console.log("authors", authors);
+      }
 
       return true;
     },
