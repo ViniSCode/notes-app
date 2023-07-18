@@ -146,7 +146,7 @@ export function AccessibleFloatingMenu(props: AccessibleFloatingMenuProps) {
           </NavigationMenu.Trigger>
         </NavigationMenu.Item>
 
-        <NavigationMenu.Item>
+        {/* <NavigationMenu.Item>
           <NavigationMenu.Trigger className="flex items-center gap-2 p-1 rounded min-w-[280px] hover:bg-zinc-600">
             <img
               src="https://www.notion.so/images/blocks/image.33d80a98.png"
@@ -158,7 +158,7 @@ export function AccessibleFloatingMenu(props: AccessibleFloatingMenuProps) {
               <span className="text-xs text-zinc-400">Upload or embed</span>
             </div>
           </NavigationMenu.Trigger>
-        </NavigationMenu.Item>
+        </NavigationMenu.Item> */}
       </NavigationMenu.List>
       <div className="perspective-[2000px] absolute top-full left-0 flex w-full justify-center">
         <NavigationMenu.Viewport className="data-[state=open]:animate-scaleIn data-[state=closed]:animate-scaleOut relative mt-[10px] h-[var(--radix-navigation-menu-viewport-height)] w-full origin-[top_center] overflow-hidden rounded-[6px] bg-white transition-[width,_height] duration-300 sm:w-[var(--radix-navigation-menu-viewport-width)]" />

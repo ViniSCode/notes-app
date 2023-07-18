@@ -19,7 +19,7 @@ import ts from "highlight.js/lib/languages/typescript";
 import html from "highlight.js/lib/languages/xml";
 import "highlight.js/styles/tokyo-night-dark.css";
 import { lowlight } from "lowlight";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { AccessibleFloatingMenu } from "../FloatingMenu";
 import EditorToggleGroup from "../ToggleGroup";
 
@@ -33,8 +33,6 @@ lowlight.registerLanguage("js", js);
 lowlight.registerLanguage("ts", ts);
 
 function Editor(props: Props) {
-  const [isUploadImageModalOpen, setIsUploadImageModalOpen] = useState(false);
-
   const editor = useEditor({
     autofocus: "end",
     extensions: [
@@ -74,9 +72,7 @@ function Editor(props: Props) {
       },
     },
     onUpdate: ({ editor }) => {},
-    onBlur: ({ editor }) => {
-      setIsUploadImageModalOpen(false);
-    },
+    onBlur: ({ editor }) => {},
   });
 
   useEffect(() => {
@@ -100,20 +96,20 @@ function Editor(props: Props) {
 
   return (
     <div
-      className="w-full h-full min-h-screen min-w-full editor-container relative z-10"
+      className="w-full h-full min-h-screen min-w-full editor-container relative z-0 bg-green-500"
       onClick={() => {
         if (editor) {
           const isText = editor.state.selection.$from.nodeBefore?.isText;
-          // if (isText) {
-          //   // editor.chain().focus().setHardBreak().run();
-          // }
+          if (isText && !editor.isFocused) {
+            editor.chain().focus().setHardBreak().run();
+          }
           editor.chain().focus().run();
         }
       }}
     >
       <EditorContent
         editor={editor}
-        className="z-20 relative max-w-[700px] mx-auto pt-16 prose prose-violet prose-pre:whitespace-pre-wrap prose-invert"
+        className="z-40 relative max-w-[700px] bg-red-500 mx-auto pt-16 prose prose-violet prose-pre:whitespace-pre-wrap prose-invert"
       />
 
       {editor && (
