@@ -51,7 +51,14 @@ function Editor(props: Props) {
         },
       }),
       Placeholder.configure({
-        placeholder: "Type something or Press '/' for commands...",
+        placeholder: ({ node }) => {
+          if (node.type.name === "heading") {
+            return "Heading";
+          }
+
+          return "Type something or Press '/' for commands...";
+        },
+        emptyNodeClass: "isNodeEmpty",
       }),
       Highlight.configure({
         HTMLAttributes: {
@@ -103,13 +110,14 @@ function Editor(props: Props) {
           if (isText && !editor.isFocused) {
             editor.chain().focus().setHardBreak().run();
           }
+
           editor.chain().focus().run();
         }
       }}
     >
       <EditorContent
         editor={editor}
-        className="z-40 relative max-w-[700px] mx-auto pt-16 prose prose-violet prose-pre:whitespace-pre-wrap prose-invert"
+        className="z-40 relative max-w-[700px] mx-auto pt-16 prose prose-violet prose-pre:whitespace-pre-wrap prose-invert selection:bg-blue-500/20"
       />
 
       {editor && (
