@@ -96,7 +96,7 @@ function Editor(props: Props) {
 
   return (
     <div
-      className="w-full h-full min-h-screen min-w-full editor-container relative z-0 bg-green-500"
+      className="w-full h-full min-h-screen min-w-full editor-container relative z-0"
       onClick={() => {
         if (editor) {
           const isText = editor.state.selection.$from.nodeBefore?.isText;
@@ -109,7 +109,7 @@ function Editor(props: Props) {
     >
       <EditorContent
         editor={editor}
-        className="z-40 relative max-w-[700px] bg-red-500 mx-auto pt-16 prose prose-violet prose-pre:whitespace-pre-wrap prose-invert"
+        className="z-40 relative max-w-[700px] mx-auto pt-16 prose prose-violet prose-pre:whitespace-pre-wrap prose-invert"
       />
 
       {editor && (
