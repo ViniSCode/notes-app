@@ -1,0 +1,7 @@
+query GetNotes($email: String!) {
+  notes(where: { author: { email: $email } }) {
+    content
+    noteId
+    title
+  }
+}

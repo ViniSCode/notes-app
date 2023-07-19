@@ -55,7 +55,7 @@ export function Sidebar({
         </div>
         <div className="flex flex-col gap-0.5 px-2">
           {notes &&
-            notes.map((note: any, index: any) => (
+            notes.map((note: Note, index: any) => (
               <div
                 key={index}
                 onClick={() => {
@@ -70,11 +70,11 @@ export function Sidebar({
               >
                 <div className="flex gap-2 items-center">
                   <FiFileText className="w-4 h-4 text-zinc-400" />
-                  <span>{note.name}</span>
+                  <span>{note.title}</span>
                 </div>
                 <DeleteDialog
                   handleDeleteNote={handleDeleteNote}
-                  id={note.id}
+                  id={note.noteId}
                 />
               </div>
             ))}

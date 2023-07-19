@@ -1880,6 +1880,7 @@ export type Node = {
 
 export type Note = Node & {
   __typename?: 'Note';
+  author?: Maybe<Author>;
   content?: Maybe<Scalars['String']>;
   /** The time the document was created */
   createdAt: Scalars['DateTime'];
@@ -1904,6 +1905,12 @@ export type Note = Node & {
   updatedAt: Scalars['DateTime'];
   /** User that last updated this document */
   updatedBy?: Maybe<User>;
+};
+
+
+export type NoteAuthorArgs = {
+  forceParentLocale?: InputMaybe<Scalars['Boolean']>;
+  locales?: InputMaybe<Array<Locale>>;
 };
 
 
@@ -1968,7 +1975,7 @@ export type NoteConnection = {
 };
 
 export type NoteCreateInput = {
-  clk01hqz50r5201uh1r9f3fyz?: InputMaybe<AuthorCreateManyInlineInput>;
+  author?: InputMaybe<AuthorCreateOneInlineInput>;
   content?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   noteId: Scalars['String'];
@@ -2009,6 +2016,7 @@ export type NoteManyWhereInput = {
   OR?: InputMaybe<Array<NoteWhereInput>>;
   /** Contains search across all appropriate fields. */
   _search?: InputMaybe<Scalars['String']>;
+  author?: InputMaybe<AuthorWhereInput>;
   content?: InputMaybe<Scalars['String']>;
   /** All values containing the given string. */
   content_contains?: InputMaybe<Scalars['String']>;
@@ -2159,7 +2167,7 @@ export enum NoteOrderByInput {
 }
 
 export type NoteUpdateInput = {
-  clk01hqz50r5201uh1r9f3fyz?: InputMaybe<AuthorUpdateManyInlineInput>;
+  author?: InputMaybe<AuthorUpdateOneInlineInput>;
   content?: InputMaybe<Scalars['String']>;
   noteId?: InputMaybe<Scalars['String']>;
   title?: InputMaybe<Scalars['String']>;
@@ -2184,7 +2192,6 @@ export type NoteUpdateManyInlineInput = {
 
 export type NoteUpdateManyInput = {
   content?: InputMaybe<Scalars['String']>;
-  noteId?: InputMaybe<Scalars['String']>;
   title?: InputMaybe<Scalars['String']>;
 };
 
@@ -2247,6 +2254,7 @@ export type NoteWhereInput = {
   OR?: InputMaybe<Array<NoteWhereInput>>;
   /** Contains search across all appropriate fields. */
   _search?: InputMaybe<Scalars['String']>;
+  author?: InputMaybe<AuthorWhereInput>;
   content?: InputMaybe<Scalars['String']>;
   /** All values containing the given string. */
   content_contains?: InputMaybe<Scalars['String']>;
@@ -2396,6 +2404,7 @@ export type NoteWhereStageInput = {
 /** References Note record uniquely */
 export type NoteWhereUniqueInput = {
   id?: InputMaybe<Scalars['ID']>;
+  noteId?: InputMaybe<Scalars['String']>;
 };
 
 /** Information about pagination in a connection. */
@@ -4261,6 +4270,13 @@ export type GetAuthorByEmailQueryVariables = Exact<{
 
 export type GetAuthorByEmailQuery = { __typename?: 'Query', authors: Array<{ __typename?: 'Author', id: string }> };
 
+export type GetNotesQueryVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type GetNotesQuery = { __typename?: 'Query', notes: Array<{ __typename?: 'Note', content?: string | null, noteId: string, title?: string | null }> };
+
 
 export const CreateAuthorDocument = gql`
     mutation CreateAuthor($email: String!, $name: String!) {
@@ -4286,4 +4302,17 @@ export const GetAuthorByEmailDocument = gql`
 
 export function useGetAuthorByEmailQuery(options: Omit<Urql.UseQueryArgs<GetAuthorByEmailQueryVariables>, 'query'>) {
   return Urql.useQuery<GetAuthorByEmailQuery, GetAuthorByEmailQueryVariables>({ query: GetAuthorByEmailDocument, ...options });
+};
+export const GetNotesDocument = gql`
+    query GetNotes($email: String!) {
+  notes(where: {author: {email: $email}}) {
+    content
+    noteId
+    title
+  }
+}
+    `;
+
+export function useGetNotesQuery(options: Omit<Urql.UseQueryArgs<GetNotesQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetNotesQuery, GetNotesQueryVariables>({ query: GetNotesDocument, ...options });
 };

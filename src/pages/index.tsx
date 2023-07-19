@@ -1,6 +1,8 @@
 import Editor from "@/components/Editor/index";
 import { Spinner } from "@/components/Loading/spinner";
 import { Sidebar } from "@/components/Sidebar";
+import { GetNotesDocument, useGetNotesQuery } from "@/generated/graphql";
+import { client, ssrCache } from "@/lib/urql";
 import type { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import Head from "next/head";
@@ -9,9 +11,10 @@ import { FiChevronsRight, FiFileText } from "react-icons/fi";
 import { v4 } from "uuid";
 
 export interface Note {
-  name: string;
-  id: string;
-  content: string;
+  __typename?: "Note" | undefined;
+  content?: string | null | undefined;
+  noteId: string;
+  title?: string | null | undefined;
 }
 
 export default function Home({ session }: any) {
@@ -20,20 +23,32 @@ export default function Home({ session }: any) {
   const [currentSelectedNote, setCurrentSelectedNote] = useState(0);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
 
+  const [{ data, error }] = useGetNotesQuery({
+    variables: {
+      email: session.user.email,
+    },
+  });
+
   useEffect(() => {
-    setNotes([
-      {
-        name: "Untitled",
-        id: v4(),
-        content: "<h1>Untitled</h1> <p></p>",
-      },
-    ]);
-  }, []);
+    if (data?.notes) {
+      if (data.notes.length > 0) {
+        setNotes(data.notes);
+      } else {
+        setNotes([
+          {
+            title: "Untitled",
+            noteId: v4(),
+            content: "<h1>Untitled</h1> <p></p>",
+          },
+        ]);
+      }
+    }
+  }, [data]);
 
   function updateNoteContent(id: string, newContent: string) {
     setNotes((prevNotes) =>
       prevNotes.map((note) =>
-        note.id === id ? { ...note, content: newContent } : note
+        note.noteId === id ? { ...note, content: newContent } : note
       )
     );
 
@@ -42,8 +57,8 @@ export default function Home({ session }: any) {
 
   function handleCreateNote() {
     const newNote = {
-      name: "Untitled",
-      id: v4(),
+      title: "Untitled",
+      noteId: v4(),
       content: "<h1>Untitled </h1> <p></p>",
     };
 
@@ -53,21 +68,13 @@ export default function Home({ session }: any) {
 
   function handleDeleteNote(noteId: string) {
     // Filter out the note with the specified ID
-    setNotes((prevNotes) => prevNotes.filter((note) => note.id !== noteId));
+    setNotes((prevNotes) => prevNotes.filter((note) => note.noteId !== noteId));
   }
 
   const handleBeforeUnload = (event: any) => {
     event.preventDefault();
     event.returnValue = "Unsaved Changes";
   };
-
-  useEffect(() => {
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
 
   useEffect(() => {
     // Check if the currentSelectedNote is out of bounds
@@ -99,7 +106,7 @@ export default function Home({ session }: any) {
 
               <div className="ml-16 flex gap-2 items-center">
                 <FiFileText className="w-4 h-4 text-zinc-400" />
-                <span>{notes[0]?.name}</span>
+                <span>{notes[0]?.title}</span>
               </div>
 
               {unsavedChanges && (
@@ -129,7 +136,7 @@ export default function Home({ session }: any) {
               <div className="select-none flex items-center gap-4 mt-2">
                 <div className="flex gap-2 items-center">
                   <FiFileText className="w-4 h-4 text-zinc-400" />
-                  <span>{notes[currentSelectedNote]?.name}</span>
+                  <span>{notes[currentSelectedNote]?.title}</span>
                 </div>
                 {unsavedChanges && (
                   <div className="ml-8 flex items-center text-zinc-300">
@@ -165,9 +172,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  await client
+    .query(GetNotesDocument, { email: session?.user?.email })
+    .toPromise();
+
   return {
     props: {
       session,
+      urqlState: ssrCache.extractData(),
     },
   };
 };
