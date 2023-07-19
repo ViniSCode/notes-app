@@ -92,7 +92,7 @@ function Editor(props: Props) {
       }
 
       const newTypingTimeout = setTimeout(() => {
-        props.updateNoteContent(props.note.id, newContent);
+        props.updateNoteContent(props.note.noteId, newContent);
       }, 2400);
 
       setTypingTimeout(newTypingTimeout);
@@ -116,7 +116,7 @@ function Editor(props: Props) {
   }, []);
 
   useEffect(() => {
-    editor?.chain().setContent(props.note.content).run();
+    editor?.chain().setContent(props!.note!.content!).run();
   }, [props.note.content]);
 
   return (
