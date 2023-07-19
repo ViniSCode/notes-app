@@ -101,6 +101,13 @@ export default function Home({ session }: any) {
                 <FiFileText className="w-4 h-4 text-zinc-400" />
                 <span>{notes[0]?.name}</span>
               </div>
+
+              {unsavedChanges && (
+                <div className="ml-8 flex items-center text-zinc-300">
+                  <Spinner />
+                  <span>Saving...</span>
+                </div>
+              )}
             </div>
           )}
 
