@@ -93,7 +93,7 @@ function Editor(props: Props) {
 
       const newTypingTimeout = setTimeout(() => {
         props.updateNoteContent(props.note.id, newContent);
-      }, 4000);
+      }, 2400);
 
       setTypingTimeout(newTypingTimeout);
     },
@@ -135,7 +135,7 @@ function Editor(props: Props) {
     >
       <EditorContent
         editor={editor}
-        className="z-40 relative max-w-[700px] mx-auto pt-16 prose prose-violet prose-pre:whitespace-pre-wrap prose-invert selection:bg-blue-500/20"
+        className="max-w-[90vw] md:max-w-[50vw] min-h-fit z-40 relative mx-auto pt-16 prose prose-violet prose-pre:whitespace-pre-wrap prose-invert selection:bg-blue-500/20"
       />
 
       {editor && (

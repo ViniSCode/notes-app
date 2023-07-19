@@ -1,4 +1,5 @@
 import Editor from "@/components/Editor/index";
+import { Spinner } from "@/components/Loading/spinner";
 import { Sidebar } from "@/components/Sidebar";
 import type { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
@@ -17,7 +18,7 @@ export default function Home({ session }: any) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [notes, setNotes] = useState<Note[]>([]);
   const [currentSelectedNote, setCurrentSelectedNote] = useState(0);
-  const [unsavedChanges, setUnsavedChanges] = useState(false); // Add this state variable
+  const [unsavedChanges, setUnsavedChanges] = useState(false);
 
   useEffect(() => {
     setNotes([
@@ -65,6 +66,19 @@ export default function Home({ session }: any) {
     );
   }
 
+  const handleBeforeUnload = (event: any) => {
+    event.preventDefault();
+    event.returnValue = "Unsaved Changes"; // This empty string will trigger the confirmation message
+  };
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
   return (
     <>
       <Head>
@@ -108,8 +122,14 @@ export default function Home({ session }: any) {
               <div className="select-none flex items-center gap-4 mt-2">
                 <div className="flex gap-2 items-center">
                   <FiFileText className="w-4 h-4 text-zinc-400" />
-                  <span>{notes[0]?.name}</span>
+                  <span>{notes[currentSelectedNote]?.name}</span>
                 </div>
+                {unsavedChanges && (
+                  <div className="ml-8 flex items-center text-zinc-300">
+                    <Spinner />
+                    <span>Saving...</span>
+                  </div>
+                )}
               </div>
             )}
             {notes && notes[currentSelectedNote] && (
