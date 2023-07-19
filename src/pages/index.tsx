@@ -24,7 +24,7 @@ export default function Home({ session }: any) {
     setNotes([
       {
         name: "Untitled",
-        id: "208hggjklsdafh204",
+        id: v4(),
         content: "<h1>Untitled</h1> <p></p>",
       },
     ]);
@@ -71,9 +71,11 @@ export default function Home({ session }: any) {
 
   useEffect(() => {
     // Check if the currentSelectedNote is out of bounds
-    if (currentSelectedNote >= notes.length) {
+    if (currentSelectedNote >= notes.length && notes.length > 1) {
       // Set it to the index of the last note if out of bounds
       setCurrentSelectedNote(notes.length - 1);
+    } else if (notes.length === 1) {
+      setCurrentSelectedNote(0);
     }
   }, [notes, currentSelectedNote]);
 
