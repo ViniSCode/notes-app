@@ -79,8 +79,11 @@ export function Sidebar({
               </div>
             ))}
 
-          <div className="mt-1 gap-2 flex justify-between items-center text-sm cursor-pointer hover:bg-zinc-600 px-6 py-1 text-zinc-400 rounded-sm transition-colors">
-            <div className="flex gap-2 items-center" onClick={handleCreateNote}>
+          <div
+            className="mt-1 select-none gap-2 flex justify-between items-center text-sm cursor-pointer hover:bg-zinc-600 px-6 py-1 text-zinc-400 rounded-sm transition-colors"
+            onClick={handleCreateNote}
+          >
+            <div className="flex gap-2 items-center">
               <FiPlus className="w-4 h-4" />
               <span className="font-medium">Add a page</span>
             </div>

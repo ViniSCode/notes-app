@@ -27,11 +27,6 @@ export default function Home({ session }: any) {
         id: "208hggjklsdafh204",
         content: "<h1>Untitled</h1> <p></p>",
       },
-      {
-        name: "Untitled 2",
-        id: "208hggjklsdafh204sdfsdf",
-        content: "<h1>Untitled 2</h1> <p></p>",
-      },
     ]);
   }, []);
 
@@ -53,13 +48,12 @@ export default function Home({ session }: any) {
     };
 
     setNotes((prevNotes) => [...prevNotes, newNote]);
-    setCurrentSelectedNote(notes.length); // Select the newly created note
+    setCurrentSelectedNote(notes.length);
   }
 
   function handleDeleteNote(noteId: string) {
     // Filter out the note with the specified ID
     setNotes((prevNotes) => prevNotes.filter((note) => note.id !== noteId));
-    setCurrentSelectedNote(notes.length);
   }
 
   const handleBeforeUnload = (event: any) => {
@@ -74,6 +68,14 @@ export default function Home({ session }: any) {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
+
+  useEffect(() => {
+    // Check if the currentSelectedNote is out of bounds
+    if (currentSelectedNote >= notes.length) {
+      // Set it to the index of the last note if out of bounds
+      setCurrentSelectedNote(notes.length - 1);
+    }
+  }, [notes, currentSelectedNote]);
 
   return (
     <>
