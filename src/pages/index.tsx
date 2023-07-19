@@ -49,7 +49,7 @@ export default function Home({ session }: any) {
     const newNote = {
       name: "Untitled",
       id: v4(),
-      content: "<h1>Untitled 2</h1> <p></p>",
+      content: "<h1>Untitled </h1> <p></p>",
     };
 
     setNotes((prevNotes) => [...prevNotes, newNote]);
@@ -59,16 +59,12 @@ export default function Home({ session }: any) {
   function handleDeleteNote(noteId: string) {
     // Filter out the note with the specified ID
     setNotes((prevNotes) => prevNotes.filter((note) => note.id !== noteId));
-
-    // Select the previous note or the first note after deleting the current one
-    setCurrentSelectedNote((prevSelectedNote) =>
-      Math.max(prevSelectedNote - 1, 0)
-    );
+    setCurrentSelectedNote(notes.length);
   }
 
   const handleBeforeUnload = (event: any) => {
     event.preventDefault();
-    event.returnValue = "Unsaved Changes"; // This empty string will trigger the confirmation message
+    event.returnValue = "Unsaved Changes";
   };
 
   useEffect(() => {
