@@ -4,8 +4,9 @@ import { FiTrash } from "react-icons/fi";
 const DeleteDialog = ({ handleDeleteNote, id }: any) => (
   <AlertDialog.Root>
     <AlertDialog.Trigger asChild>
-      <button className="w-6 h-6 flex items-center justify-center indent-[9999em] uppercase text-zinc-400 hover:text-zinc-300 rounded-sm hover:bg-zinc-500  transition-colors">
+      <button className="indent-[-9999em] uppercase w-6 h-6 flex items-center justify-center text-zinc-400 hover:text-zinc-300 rounded-sm hover:bg-zinc-500  transition-colors">
         <FiTrash className="w-4 h-4" />
+        Delete
       </button>
     </AlertDialog.Trigger>
     <AlertDialog.Portal>

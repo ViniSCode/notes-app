@@ -104,6 +104,10 @@ export default function Home({ session }: any) {
     <>
       <Head>
         <title>Noting | Notes App</title>
+        <meta
+          name="description"
+          content="Welcome to our powerful and intuitive notes app! Create, read, update, and delete your notes with ease. Organize your thoughts, stay productive, and never forget important ideas. Start capturing your moments of inspiration today."
+        />
       </Head>
       <div className="min-h-screen text-zinc-50">
         <div

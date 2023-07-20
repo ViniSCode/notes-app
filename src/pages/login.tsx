@@ -22,9 +22,13 @@ export default function Login({ session }: any) {
     <>
       <Head>
         <title>Noting | Log In</title>
+        <meta
+          name="description"
+          content="Access your notes anytime, anywhere. Log in now to enjoy secure and seamless note-taking. Streamline your productivity and stay organized with our user-friendly notes app."
+        />
       </Head>
       <div className="min-h-screen min-w-full bg-zinc-900 flex items-center justify-center">
-        <div className="p-10 rounded">
+        <div className="p-2 md:p-10 rounded">
           <Image
             width={200}
             height={200}
@@ -37,7 +41,7 @@ export default function Login({ session }: any) {
             Log in
           </h1>
           <button
-            className="mt-12 font-medium bg-zinc-800 text-zinc-300 rounded px-10 py-4 flex items-center gap-2 hover:bg-zinc-700 transition-colors"
+            className="mt-12 font-medium text-sm md:text-base bg-zinc-800 text-zinc-300 rounded px-4 py-3 md:px-10 md:py-4 flex items-center gap-2 hover:bg-zinc-700 transition-colors"
             onClick={handleLoginWithGoogle}
           >
             <FcGoogle size={22} />
@@ -45,7 +49,7 @@ export default function Login({ session }: any) {
           </button>
           <button
             onClick={handleLoginWithGitHub}
-            className="mt-4 font-medium bg-zinc-800 text-zinc-300 rounded px-10 py-4 flex items-center gap-2 hover:bg-zinc-700 transition-colors"
+            className="mt-4 font-medium text-sm md:text-base bg-zinc-800 text-zinc-300 rounded px-4 py-3 md:px-10 md:py-4  flex items-center gap-2 hover:bg-zinc-700 transition-colors"
           >
             <AiFillGithub size={22} />
             Continue with Github
