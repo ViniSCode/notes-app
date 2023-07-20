@@ -4261,29 +4261,32 @@ export type CreateAuthorMutationVariables = Exact<{
 }>;
 
 
-export type CreateAuthorMutation = { __typename?: 'Mutation', createAuthor?: { __typename?: 'Author', id: string } | null, publishAuthor?: { __typename?: 'Author', id: string } | null };
+export type CreateAuthorMutation = { __typename: 'Mutation', createAuthor?: { __typename: 'Author', id: string } | null, publishAuthor?: { __typename: 'Author', id: string } | null };
 
 export type GetAuthorByEmailQueryVariables = Exact<{
   email: Scalars['String'];
 }>;
 
 
-export type GetAuthorByEmailQuery = { __typename?: 'Query', authors: Array<{ __typename?: 'Author', id: string }> };
+export type GetAuthorByEmailQuery = { __typename: 'Query', authors: Array<{ __typename: 'Author', id: string }> };
 
 export type GetNotesQueryVariables = Exact<{
   email: Scalars['String'];
 }>;
 
 
-export type GetNotesQuery = { __typename?: 'Query', notes: Array<{ __typename?: 'Note', content?: string | null, noteId: string, title?: string | null }> };
+export type GetNotesQuery = { __typename: 'Query', notes: Array<{ __typename: 'Note', content?: string | null, noteId: string, title?: string | null }> };
 
 
 export const CreateAuthorDocument = gql`
     mutation CreateAuthor($email: String!, $name: String!) {
+  __typename
   createAuthor(data: {email: $email, name: $name}) {
+    __typename
     id
   }
   publishAuthor(where: {email: $email}) {
+    __typename
     id
   }
 }
@@ -4294,8 +4297,10 @@ export function useCreateAuthorMutation() {
 };
 export const GetAuthorByEmailDocument = gql`
     query GetAuthorByEmail($email: String!) {
+  __typename
   authors(where: {email: $email}) {
     id
+    __typename
   }
 }
     `;
@@ -4305,7 +4310,9 @@ export function useGetAuthorByEmailQuery(options: Omit<Urql.UseQueryArgs<GetAuth
 };
 export const GetNotesDocument = gql`
     query GetNotes($email: String!) {
+  __typename
   notes(where: {author: {email: $email}}) {
+    __typename
     content
     noteId
     title

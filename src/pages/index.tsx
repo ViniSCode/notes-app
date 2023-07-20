@@ -45,6 +45,28 @@ export default function Home({ session }: any) {
     }
   }, [data]);
 
+  useEffect(() => {
+    if (unsavedChanges) {
+      window.addEventListener("beforeunload", handleBeforeUnload);
+    } else {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    }
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [unsavedChanges]);
+
+  useEffect(() => {
+    // Check if the currentSelectedNote is out of bounds
+    if (currentSelectedNote >= notes.length && notes.length > 1) {
+      // Set it to the index of the last note if out of bounds
+      setCurrentSelectedNote(notes.length - 1);
+    } else if (notes.length === 1) {
+      setCurrentSelectedNote(0);
+    }
+  }, [notes, currentSelectedNote]);
+
   function updateNoteContent(id: string, newContent: string) {
     setNotes((prevNotes) =>
       prevNotes.map((note) =>
@@ -71,20 +93,12 @@ export default function Home({ session }: any) {
     setNotes((prevNotes) => prevNotes.filter((note) => note.noteId !== noteId));
   }
 
-  const handleBeforeUnload = (event: any) => {
-    event.preventDefault();
-    event.returnValue = "Unsaved Changes";
-  };
-
-  useEffect(() => {
-    // Check if the currentSelectedNote is out of bounds
-    if (currentSelectedNote >= notes.length && notes.length > 1) {
-      // Set it to the index of the last note if out of bounds
-      setCurrentSelectedNote(notes.length - 1);
-    } else if (notes.length === 1) {
-      setCurrentSelectedNote(0);
+  const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+    if (unsavedChanges) {
+      event.preventDefault();
+      event.returnValue = "Unsaved Changes";
     }
-  }, [notes, currentSelectedNote]);
+  };
 
   return (
     <>

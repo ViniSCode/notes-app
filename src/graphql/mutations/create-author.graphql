@@ -1,9 +1,12 @@
 mutation CreateAuthor($email: String!, $name: String!) {
+  __typename
   createAuthor(data: { email: $email, name: $name }) {
+    __typename
     id
   }
 
   publishAuthor(where: { email: $email }) {
+    __typename
     id
   }
 }

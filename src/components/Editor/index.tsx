@@ -83,8 +83,6 @@ function Editor(props: Props) {
       },
     },
     onUpdate: ({ editor }) => {
-      props.setUnsavedChanges(true);
-
       const newContent = editor.getHTML(); // Get the updated note content from the editor
 
       if (typingTimeout) {
@@ -93,9 +91,11 @@ function Editor(props: Props) {
 
       const newTypingTimeout = setTimeout(() => {
         props.updateNoteContent(props.note.noteId, newContent);
-      }, 2400);
+      }, 2000);
 
       setTypingTimeout(newTypingTimeout);
+
+      props.setUnsavedChanges(true);
     },
     onBlur: ({ editor }) => {},
   });
