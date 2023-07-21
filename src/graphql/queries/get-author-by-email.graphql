@@ -1,7 +1,0 @@
-query GetAuthorByEmail($email: String!) {
-  __typename
-  authors(where: { email: $email }) {
-    id
-    __typename
-  }
-}

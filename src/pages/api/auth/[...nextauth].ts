@@ -1,8 +1,3 @@
-import {
-  CreateAuthorDocument,
-  GetAuthorByEmailDocument,
-} from "@/generated/graphql";
-import { client } from "@/lib/urql";
 import NextAuth from "next-auth/next";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
@@ -23,19 +18,6 @@ export default NextAuth({
     async signIn({ user, account, profile }) {
       const email = user.email!;
       const name = user.name!;
-
-      const {
-        data: { authors },
-      } = await client.query(GetAuthorByEmailDocument, { email }).toPromise();
-
-      if (authors.length === 0) {
-        // customer doesn't exists
-        await client
-          .mutation(CreateAuthorDocument, { email, name })
-          .toPromise();
-      } else {
-        // if customer exists
-      }
 
       return true;
     },

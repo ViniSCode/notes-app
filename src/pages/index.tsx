@@ -1,8 +1,6 @@
 import Editor from "@/components/Editor/index";
 import { Spinner } from "@/components/Loading/spinner";
 import { Sidebar } from "@/components/Sidebar";
-import { GetNotesDocument, useGetNotesQuery } from "@/generated/graphql";
-import { client, ssrCache } from "@/lib/urql";
 import type { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import Head from "next/head";
@@ -23,27 +21,30 @@ export default function Home({ session }: any) {
   const [currentSelectedNote, setCurrentSelectedNote] = useState(0);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
 
-  const [{ data, error }] = useGetNotesQuery({
-    variables: {
-      email: session.user.email,
-    },
-  });
+  const getNotesFromLocalStorage = (): Note[] => {
+    const storedNotes = localStorage.getItem("notes");
+    return storedNotes ? JSON.parse(storedNotes) : [];
+  };
+
+  const setNotesToLocalStorage = (notes: Note[]): void => {
+    localStorage.setItem("notes", JSON.stringify(notes));
+  };
 
   useEffect(() => {
-    if (data?.notes) {
-      if (data.notes.length > 0) {
-        setNotes(data.notes);
-      } else {
-        setNotes([
-          {
-            title: "Untitled",
-            noteId: v4(),
-            content: "<h1>Untitled</h1> <p></p>",
-          },
-        ]);
-      }
+    const storedNotes = getNotesFromLocalStorage();
+
+    if (storedNotes.length === 0) {
+      setNotes([
+        {
+          title: "Untitled",
+          noteId: v4(),
+          content: "<h1>Untitled</h1> <p></p>",
+        },
+      ]);
+    } else {
+      setNotes(storedNotes);
     }
-  }, [data]);
+  }, []);
 
   useEffect(() => {
     if (unsavedChanges) {
@@ -58,9 +59,7 @@ export default function Home({ session }: any) {
   }, [unsavedChanges]);
 
   useEffect(() => {
-    // Check if the currentSelectedNote is out of bounds
     if (currentSelectedNote >= notes.length && notes.length > 1) {
-      // Set it to the index of the last note if out of bounds
       setCurrentSelectedNote(notes.length - 1);
     } else if (notes.length === 1) {
       setCurrentSelectedNote(0);
@@ -75,6 +74,12 @@ export default function Home({ session }: any) {
     );
 
     setUnsavedChanges(false);
+
+    setNotesToLocalStorage(
+      notes.map((note) =>
+        note.noteId === id ? { ...note, content: newContent } : note
+      )
+    );
   }
 
   function handleCreateNote() {
@@ -86,11 +91,13 @@ export default function Home({ session }: any) {
 
     setNotes((prevNotes) => [...prevNotes, newNote]);
     setCurrentSelectedNote(notes.length);
+
+    setNotesToLocalStorage([...notes, newNote]);
   }
 
   function handleDeleteNote(noteId: string) {
-    // Filter out the note with the specified ID
     setNotes((prevNotes) => prevNotes.filter((note) => note.noteId !== noteId));
+    setNotesToLocalStorage(notes.filter((note) => note.noteId !== noteId));
   }
 
   const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -164,10 +171,11 @@ export default function Home({ session }: any) {
                 )}
               </div>
             )}
-            {notes && notes[currentSelectedNote] && (
+            {notes && notes[currentSelectedNote] && session && (
               <Editor
                 note={notes[currentSelectedNote]}
                 updateNoteContent={updateNoteContent}
+                session={session}
                 setUnsavedChanges={setUnsavedChanges}
               />
             )}
@@ -190,14 +198,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-  await client
-    .query(GetNotesDocument, { email: session?.user?.email })
-    .toPromise();
-
   return {
     props: {
       session,
-      urqlState: ssrCache.extractData(),
     },
   };
 };

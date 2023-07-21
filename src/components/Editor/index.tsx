@@ -19,6 +19,7 @@ import ts from "highlight.js/lib/languages/typescript";
 import html from "highlight.js/lib/languages/xml";
 import "highlight.js/styles/tokyo-night-dark.css";
 import { lowlight } from "lowlight";
+import { Session } from "next-auth";
 import { useEffect, useState } from "react";
 import { AccessibleFloatingMenu } from "../FloatingMenu";
 import EditorToggleGroup from "../ToggleGroup";
@@ -27,6 +28,7 @@ interface Props {
   note: Note;
   updateNoteContent: any;
   setUnsavedChanges: (value: boolean) => void;
+  session: Session;
 }
 
 lowlight.registerLanguage("html", html);
@@ -83,15 +85,13 @@ function Editor(props: Props) {
       },
     },
     onUpdate: ({ editor }) => {
-      const newContent = editor.getHTML(); // Get the updated note content from the editor
-
       if (typingTimeout) {
         clearTimeout(typingTimeout);
       }
 
-      const newTypingTimeout = setTimeout(() => {
-        props.updateNoteContent(props.note.noteId, newContent);
-      }, 2000);
+      const newTypingTimeout = setTimeout(async () => {
+        props.updateNoteContent(props.note.noteId, editor.getHTML());
+      }, 1000);
 
       setTypingTimeout(newTypingTimeout);
 

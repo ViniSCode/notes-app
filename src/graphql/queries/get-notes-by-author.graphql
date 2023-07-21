@@ -1,9 +1,0 @@
-query GetNotes($email: String!) {
-  __typename
-  notes(where: { author: { email: $email } }) {
-    __typename
-    content
-    noteId
-    title
-  }
-}

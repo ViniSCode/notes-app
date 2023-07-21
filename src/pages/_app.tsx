@@ -1,8 +1,3 @@
-// import { Loading } from "@/components/Loading";
-// import { AppContextProvider } from "@/context/AppContext";
-// import { MapContextProvider } from "@/context/MapContext";
-// import { SharePlanContextProvider } from "@/context/SharePlanContext";
-import { client, ssrCache } from "@/lib/urql";
 import "@/styles/globals.css";
 import { GetServerSideProps } from "next";
 import { SessionProvider } from "next-auth/react";
@@ -11,7 +6,6 @@ import type { AppProps } from "next/app";
 import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Provider } from "urql";
 
 export default function App({ Component, pageProps, router }: AppProps) {
   const [isPageLoading, setIsPageLoading] = useState(false);
@@ -26,30 +20,23 @@ export default function App({ Component, pageProps, router }: AppProps) {
     });
   }, []);
 
-  if (pageProps.urqlState) {
-    ssrCache.restoreData(pageProps.urqlState);
-  }
-
   return (
     <SessionProvider session={pageProps.session}>
-      <Provider value={client}>
-        <ThemeProvider attribute="class">
-          {/* {isPageLoading && <Loading />} */}
-          <ToastContainer
-            position="top-right"
-            autoClose={7000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light"
-          />
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </Provider>
+      <ThemeProvider attribute="class">
+        <ToastContainer
+          position="top-right"
+          autoClose={7000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
+        <Component {...pageProps} />
+      </ThemeProvider>
     </SessionProvider>
   );
 }
