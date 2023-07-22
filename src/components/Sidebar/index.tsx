@@ -1,6 +1,5 @@
 import { Note } from "@/pages";
 import { motion } from "framer-motion";
-import { Session } from "next-auth";
 import { FiChevronsLeft, FiFileText, FiPlus } from "react-icons/fi";
 import { toast } from "react-toastify";
 import DeleteDialog from "../DeleteDialog";
@@ -12,7 +11,7 @@ interface SidebarProps {
   notes: Note[];
   setCurrentSelectedNote: any;
   currentSelectedNote: any;
-  session: Session;
+  // session: Session;
   unsavedChanges: boolean;
   handleCreateNote: any;
   handleDeleteNote: any;
@@ -24,7 +23,7 @@ export function Sidebar({
   notes,
   setCurrentSelectedNote,
   currentSelectedNote,
-  session,
+  // session,
   unsavedChanges,
   handleCreateNote,
   handleDeleteNote,
@@ -46,7 +45,7 @@ export function Sidebar({
     >
       <aside className="static w-[16rem] min-w-[16rem]">
         <div className="flex relative gap-4 group justify-between items-center">
-          <ProfileDropdown session={session} />
+          <ProfileDropdown />
 
           <FiChevronsLeft
             className="absolute right-6 top-[22px] w-7 h-7 text-zinc-400 hover:bg-zinc-700 rounded-sm p-0.5 cursor-pointer"

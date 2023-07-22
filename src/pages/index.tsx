@@ -1,8 +1,6 @@
 import Editor from "@/components/Editor/index";
 import { Spinner } from "@/components/Loading/spinner";
 import { Sidebar } from "@/components/Sidebar";
-import type { GetServerSideProps } from "next";
-import { getSession } from "next-auth/react";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { FiChevronsRight, FiFileText } from "react-icons/fi";
@@ -15,7 +13,7 @@ export interface Note {
   title?: string | null | undefined;
 }
 
-export default function Home({ session }: any) {
+export default function Home() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [notes, setNotes] = useState<Note[]>([]);
   const [currentSelectedNote, setCurrentSelectedNote] = useState(0);
@@ -185,7 +183,7 @@ export default function Home({ session }: any) {
             notes={notes}
             isSidebarOpen={isSidebarOpen}
             setIsSidebarOpen={setIsSidebarOpen}
-            session={session}
+            // session={session}
             unsavedChanges={unsavedChanges}
             handleCreateNote={handleCreateNote}
             handleDeleteNote={handleDeleteNote}
@@ -205,11 +203,11 @@ export default function Home({ session }: any) {
                 )}
               </div>
             )}
-            {notes && notes[currentSelectedNote] && session && (
+            {notes && notes[currentSelectedNote] && (
               <Editor
                 note={notes[currentSelectedNote]}
                 updateNoteContent={updateNoteContent}
-                session={session}
+                // session={session}
                 setUnsavedChanges={setUnsavedChanges}
                 updateNoteTitle={updateNoteTitle}
               />
@@ -221,21 +219,21 @@ export default function Home({ session }: any) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const session = await getSession(context);
 
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
-  }
+//   // if (!session) {
+//   //   return {
+//   //     redirect: {
+//   //       destination: "/login",
+//   //       permanent: false,
+//   //     },
+//   //   };
+//   // }
 
-  return {
-    props: {
-      session,
-    },
-  };
-};
+//   return {
+//     props: {
+//       // session,
+//     },
+//   };
+// };

@@ -19,7 +19,6 @@ import ts from "highlight.js/lib/languages/typescript";
 import html from "highlight.js/lib/languages/xml";
 import "highlight.js/styles/tokyo-night-dark.css";
 import { lowlight } from "lowlight";
-import { Session } from "next-auth";
 import { useEffect, useState } from "react";
 import { AccessibleFloatingMenu } from "../FloatingMenu";
 import EditorToggleGroup from "../ToggleGroup";
@@ -28,7 +27,7 @@ interface Props {
   note: Note;
   updateNoteContent: any;
   setUnsavedChanges: (value: boolean) => void;
-  session: Session;
+  // session: Session;
   updateNoteTitle: any;
 }
 
