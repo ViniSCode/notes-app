@@ -82,11 +82,45 @@ export default function Home({ session }: any) {
     );
   }
 
+  function updateNoteTitle(id: string, newTitle: string) {
+    if (newTitle.trim() === "") {
+      setNotes((prevNotes) =>
+        prevNotes.map((note) =>
+          note.noteId === id ? { ...note, title: "Untitled" } : note
+        )
+      );
+
+      setUnsavedChanges(false);
+
+      setNotesToLocalStorage(
+        notes.map((note) =>
+          note.noteId === id ? { ...note, title: "Untitled" } : note
+        )
+      );
+
+      return;
+    }
+
+    setNotes((prevNotes) =>
+      prevNotes.map((note) =>
+        note.noteId === id ? { ...note, title: newTitle } : note
+      )
+    );
+
+    setUnsavedChanges(false);
+
+    setNotesToLocalStorage(
+      notes.map((note) =>
+        note.noteId === id ? { ...note, title: newTitle } : note
+      )
+    );
+  }
+
   function handleCreateNote() {
     const newNote = {
       title: "Untitled",
       noteId: v4(),
-      content: "<h1>Untitled </h1> <p></p>",
+      content: "<p></p>",
     };
 
     setNotes((prevNotes) => [...prevNotes, newNote]);
@@ -177,6 +211,7 @@ export default function Home({ session }: any) {
                 updateNoteContent={updateNoteContent}
                 session={session}
                 setUnsavedChanges={setUnsavedChanges}
+                updateNoteTitle={updateNoteTitle}
               />
             )}
           </main>
