@@ -151,6 +151,7 @@ function Editor(props: Props) {
           if (editor) {
             const isText = editor.state.selection.$from.nodeBefore?.isText;
             if (isText && !editor.isFocused) {
+              editor.chain().focus().selectTextblockEnd().run();
               editor.chain().focus().setHardBreak().run();
             }
 

@@ -161,10 +161,12 @@ export default function Home() {
                 onClick={() => setIsSidebarOpen(true)}
               />
 
-              <div className="ml-16 flex gap-2 items-center">
-                <FiFileText className="w-4 h-4 text-zinc-400" />
-                <span>{notes[0]?.title}</span>
-              </div>
+              {notes.length > 0 && (
+                <div className="ml-16 flex gap-2 items-center">
+                  <FiFileText className="w-4 h-4 text-zinc-400" />
+                  <span>{notes[currentSelectedNote]?.title}</span>
+                </div>
+              )}
 
               {unsavedChanges && (
                 <div className="ml-8 flex items-center text-zinc-300">
@@ -189,7 +191,7 @@ export default function Home() {
             handleDeleteNote={handleDeleteNote}
           />
           <main className="px-8 md:px-20 py-4 mt-10 md:mt-0">
-            {isSidebarOpen && (
+            {isSidebarOpen && notes.length > 0 && (
               <div className="select-none flex items-center gap-4 mt-2">
                 <div className="flex gap-2 items-center">
                   <FiFileText className="w-4 h-4 text-zinc-400" />
