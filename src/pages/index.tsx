@@ -36,7 +36,7 @@ export default function Home() {
         {
           title: "Untitled",
           noteId: v4(),
-          content: "<h1>Untitled</h1> <p></p>",
+          content: "<h1></h1> <p></p>",
         },
       ]);
     } else {
