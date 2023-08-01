@@ -60,25 +60,24 @@ export default function Home() {
     if (user) {
       try {
         const notesRef = firebase.database().ref(`users/${user?.id}/notes`);
-
-        console.log(notesRef);
-
         notesRef.on("value", (snapshot) => {
           if (snapshot.val()) {
             setNotes(Object.values(snapshot.val()));
+          } else {
+            handleCreateNote();
           }
         });
-
-        if (notes.length === 0) {
-          handleCreateNote();
-        }
       } catch (err) {
         console.log(err);
       }
     }
   }, [user]);
 
-  async function updateNoteContent(newContent: string, currentNote: Note) {
+  async function updateNoteContent(
+    newContent: string,
+    currentNote: Note,
+    firstH1Element: string
+  ) {
     setNotes((prevNotes) =>
       prevNotes.map((note) =>
         note.noteId === currentNote.noteId
@@ -91,7 +90,7 @@ export default function Home() {
       .ref(`users/${user?.id}/notes/${currentNote.noteId}`)
       .update({
         content: newContent,
-        title: currentNote.title,
+        title: firstH1Element ? firstH1Element : "Untitled",
         noteId: currentNote.noteId,
       })
       .then(function () {
@@ -131,7 +130,7 @@ export default function Home() {
     const newNote = {
       title: "Untitled",
       noteId: v4(),
-      content: "<p></p>",
+      content: "<h1>Untitled</h1><p></p>",
     };
 
     setNotes((prevNotes) => [...prevNotes, newNote]);
@@ -245,12 +244,12 @@ export default function Home() {
           <main className="px-8 md:px-20 py-4 mt-10 md:mt-0">
             {isSidebarOpen && notes.length > 0 && (
               <div className="select-none flex items-center gap-4 mt-2">
-                <div className="flex gap-2 items-center">
+                {/* <div className="flex gap-2 items-center">
                   <FiFileText className="w-4 h-4 text-zinc-400" />
                   <span>{notes[currentSelectedNote]?.title}</span>
-                </div>
+                </div> */}
                 {unsavedChanges && (
-                  <div className="ml-8 flex items-center text-zinc-300">
+                  <div className="flex items-center text-zinc-300">
                     <Spinner />
                     <span>Saving...</span>
                   </div>
