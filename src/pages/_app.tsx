@@ -1,6 +1,5 @@
+import { AuthProvider } from "@/context/AuthContext";
 import "@/styles/globals.css";
-import { GetServerSideProps } from "next";
-import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
 import type { AppProps } from "next/app";
 import { useEffect, useState } from "react";
@@ -21,7 +20,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
   }, []);
 
   return (
-    <SessionProvider session={pageProps.session}>
+    <AuthProvider>
       <ThemeProvider attribute="class">
         <ToastContainer
           position="top-right"
@@ -37,28 +36,6 @@ export default function App({ Component, pageProps, router }: AppProps) {
         />
         <Component {...pageProps} />
       </ThemeProvider>
-    </SessionProvider>
+    </AuthProvider>
   );
 }
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const url =
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api/maps";
-  try {
-    const res = await fetch(url);
-    const { apiKey } = await res.json();
-
-    return {
-      props: {
-        apiKey,
-      },
-    };
-  } catch (err) {
-    console.error("Failed to fetch API key:", err);
-    return {
-      props: {
-        apiKey: "",
-      },
-    };
-  }
-};

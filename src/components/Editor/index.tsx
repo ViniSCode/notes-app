@@ -27,7 +27,7 @@ interface Props {
   note: Note;
   updateNoteContent: any;
   setUnsavedChanges: (value: boolean) => void;
-  // session: Session;
+  session?: any;
   updateNoteTitle: any;
 }
 
@@ -90,7 +90,7 @@ function Editor(props: Props) {
       }
 
       const newTypingTimeout = setTimeout(async () => {
-        props.updateNoteContent(props.note.noteId, editor.getHTML());
+        props.updateNoteContent(editor.getHTML(), props.note);
       }, 1000);
 
       setTypingTimeout(newTypingTimeout);

@@ -1,0 +1,16 @@
+{
+  "users": {
+    "N1a0ZhDhDFbnSNA8w129h0": {
+      "note": {
+        "title": "noteTitle",
+        "content": "noteContent"
+      }
+    },
+    "N2b0ZaDhDbSgNAgw1621sg0": {
+      "note": {
+        "title": "noteTitle",
+        "content": "noteContent"
+      }
+    }
+  }
+}

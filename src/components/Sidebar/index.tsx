@@ -11,7 +11,7 @@ interface SidebarProps {
   notes: Note[];
   setCurrentSelectedNote: any;
   currentSelectedNote: any;
-  // session: Session;
+  session?: any;
   unsavedChanges: boolean;
   handleCreateNote: any;
   handleDeleteNote: any;
@@ -23,7 +23,7 @@ export function Sidebar({
   notes,
   setCurrentSelectedNote,
   currentSelectedNote,
-  // session,
+  session,
   unsavedChanges,
   handleCreateNote,
   handleDeleteNote,
@@ -45,7 +45,7 @@ export function Sidebar({
     >
       <aside className="static w-[16rem] min-w-[16rem]">
         <div className="flex relative gap-4 group justify-between items-center">
-          <ProfileDropdown />
+          <ProfileDropdown session={session} />
 
           <FiChevronsLeft
             className="absolute right-6 top-[22px] w-7 h-7 text-zinc-400 hover:bg-zinc-700 rounded-sm p-0.5 cursor-pointer"
