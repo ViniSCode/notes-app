@@ -13,9 +13,18 @@ body {
   @apply bg-gradient-to-r from-zinc-900 min-h-full;
 }
 
-.ProseMirror .isNodeEmpty::before {
+.ProseMirror .isNodeEmpty:last-child::before {
   color: #7d7d7d;
   content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+  font-weight: normal;
+}
+
+.ProseMirror h1.isNodeEmpty:first-child::before {
+  color: #7d7d7d;
+  content: "Untitled";
   float: left;
   height: 0;
   pointer-events: none;

@@ -22,6 +22,8 @@ export default function Home() {
   const [currentSelectedNote, setCurrentSelectedNote] = useState(0);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [typingTimeout, setTypingTimeout] = useState<number | any>(undefined);
+  const [isInitialFetchComplete, setIsInitialFetchComplete] = useState(false);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -64,7 +66,9 @@ export default function Home() {
           if (snapshot.val()) {
             setNotes(Object.values(snapshot.val()));
           } else {
-            handleCreateNote();
+            if (notes.length === 0) {
+              // handleCreateNote();
+            }
           }
         });
       } catch (err) {
@@ -243,13 +247,13 @@ export default function Home() {
           />
           <main className="px-8 md:px-20 py-4 mt-10 md:mt-0">
             {isSidebarOpen && notes.length > 0 && (
-              <div className="select-none flex items-center gap-4 mt-2">
-                {/* <div className="flex gap-2 items-center">
+              <div className="fixed top-0 pl-[20rem] left-0 pt-6 pb-6 w-full select-none flex items-center bg-zinc-800 z-[40]">
+                <div className="flex gap-2 items-center">
                   <FiFileText className="w-4 h-4 text-zinc-400" />
                   <span>{notes[currentSelectedNote]?.title}</span>
-                </div> */}
+                </div>
                 {unsavedChanges && (
-                  <div className="flex items-center text-zinc-300">
+                  <div className="ml-8 flex items-center text-zinc-300">
                     <Spinner />
                     <span>Saving...</span>
                   </div>

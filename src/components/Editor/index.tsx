@@ -73,6 +73,7 @@ function Editor(props: Props) {
           return "Type something or Press '/' for commands...";
         },
         emptyNodeClass: "isNodeEmpty",
+        showOnlyCurrent: false,
       }),
       Highlight.configure({
         HTMLAttributes: {
@@ -115,6 +116,7 @@ function Editor(props: Props) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, "text/html");
     const h1Element = doc.querySelector("h1");
+    h1Element?.classList.add("title");
 
     if (h1Element) {
       return h1Element.textContent;
@@ -127,7 +129,6 @@ function Editor(props: Props) {
     const handleKeyDown = (event: any) => {
       if ((event.ctrlKey || event.metaKey) && event.key === "s") {
         event.preventDefault();
-        // Optionally, you can display a message or perform some action here
       }
     };
 
@@ -151,7 +152,7 @@ function Editor(props: Props) {
             const isText = editor.state.selection.$from.nodeBefore?.isText;
             if (isText && !editor.isFocused) {
               editor.chain().focus().selectTextblockEnd().run();
-              editor.chain().focus().setHardBreak().run();
+              // editor.chain().focus().setHardBreak().run();
             }
 
             editor.chain().focus().run();
