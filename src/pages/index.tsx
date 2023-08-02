@@ -1,48 +1,30 @@
 import Editor from "@/components/Editor/index";
 import { Spinner } from "@/components/Loading/spinner";
 import { Sidebar } from "@/components/Sidebar";
+import { useAuth } from "@/hooks/useAuth";
+import { auth, database, firebase } from "@/lib/firebase";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FiChevronsRight, FiFileText } from "react-icons/fi";
 import { v4 } from "uuid";
 
 export interface Note {
-  __typename?: "Note" | undefined;
   content?: string | null | undefined;
   noteId: string;
   title?: string | null | undefined;
 }
 
 export default function Home() {
+  const { user } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [notes, setNotes] = useState<Note[]>([]);
   const [currentSelectedNote, setCurrentSelectedNote] = useState(0);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
+  const [typingTimeout, setTypingTimeout] = useState<number | any>(undefined);
+  const [isInitialFetchComplete, setIsInitialFetchComplete] = useState(false);
 
-  const getNotesFromLocalStorage = (): Note[] => {
-    const storedNotes = localStorage.getItem("notes");
-    return storedNotes ? JSON.parse(storedNotes) : [];
-  };
-
-  const setNotesToLocalStorage = (notes: Note[]): void => {
-    localStorage.setItem("notes", JSON.stringify(notes));
-  };
-
-  useEffect(() => {
-    const storedNotes = getNotesFromLocalStorage();
-
-    if (storedNotes.length === 0) {
-      setNotes([
-        {
-          title: "Untitled",
-          noteId: v4(),
-          content: "<h1></h1> <p></p>",
-        },
-      ]);
-    } else {
-      setNotes(storedNotes);
-    }
-  }, []);
+  const router = useRouter();
 
   useEffect(() => {
     if (unsavedChanges) {
@@ -64,39 +46,70 @@ export default function Home() {
     }
   }, [notes, currentSelectedNote]);
 
-  function updateNoteContent(id: string, newContent: string) {
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (!user) {
+        router.push("/login");
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      try {
+        const notesRef = firebase.database().ref(`users/${user?.id}/notes`);
+        notesRef.on("value", (snapshot) => {
+          if (snapshot.val()) {
+            setNotes(Object.values(snapshot.val()));
+          } else {
+            if (notes.length === 0) {
+              // handleCreateNote();
+            }
+          }
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }, [user]);
+
+  async function updateNoteContent(
+    newContent: string,
+    currentNote: Note,
+    firstH1Element: string
+  ) {
     setNotes((prevNotes) =>
       prevNotes.map((note) =>
-        note.noteId === id ? { ...note, content: newContent } : note
+        note.noteId === currentNote.noteId
+          ? { ...note, content: newContent }
+          : note
       )
     );
+
+    await database
+      .ref(`users/${user?.id}/notes/${currentNote.noteId}`)
+      .update({
+        content: newContent,
+        title: firstH1Element ? firstH1Element : "Untitled",
+        noteId: currentNote.noteId,
+      })
+      .then(function () {
+        console.log("update succeeded.");
+      })
+      .catch(function (error) {
+        console.log("something went wrong: " + error.message);
+      });
 
     setUnsavedChanges(false);
-
-    setNotesToLocalStorage(
-      notes.map((note) =>
-        note.noteId === id ? { ...note, content: newContent } : note
-      )
-    );
   }
 
-  function updateNoteTitle(id: string, newTitle: string) {
+  async function updateNoteTitle(id: string, newTitle: string) {
     if (newTitle.trim() === "") {
-      setNotes((prevNotes) =>
-        prevNotes.map((note) =>
-          note.noteId === id ? { ...note, title: "Untitled" } : note
-        )
-      );
-
-      setUnsavedChanges(false);
-
-      setNotesToLocalStorage(
-        notes.map((note) =>
-          note.noteId === id ? { ...note, title: "Untitled" } : note
-        )
-      );
-
-      return;
+      newTitle = "Untitled";
     }
 
     setNotes((prevNotes) =>
@@ -105,31 +118,46 @@ export default function Home() {
       )
     );
 
-    setUnsavedChanges(false);
+    if (typingTimeout) {
+      clearTimeout(typingTimeout);
+    }
 
-    setNotesToLocalStorage(
-      notes.map((note) =>
-        note.noteId === id ? { ...note, title: newTitle } : note
-      )
-    );
+    const newTypingTimeout = setTimeout(async () => {
+      await updateNoteTitleFirebase(newTitle, id);
+      setUnsavedChanges(false);
+    }, 2000);
+
+    setTypingTimeout(newTypingTimeout);
   }
 
-  function handleCreateNote() {
+  async function handleCreateNote() {
     const newNote = {
       title: "Untitled",
       noteId: v4(),
-      content: "<p></p>",
+      content: "<h1>Untitled</h1><p></p>",
     };
 
     setNotes((prevNotes) => [...prevNotes, newNote]);
     setCurrentSelectedNote(notes.length);
 
-    setNotesToLocalStorage([...notes, newNote]);
+    await database
+      .ref(`users/${user?.id}/notes/${newNote.noteId}`)
+      .update({
+        content: newNote.content,
+        title: newNote.title,
+        noteId: newNote.noteId,
+      })
+      .then(function () {
+        console.log("update succeeded.");
+      })
+      .catch(function (error) {
+        console.log("something went wrong: " + error.message);
+      });
   }
 
-  function handleDeleteNote(noteId: string) {
+  async function handleDeleteNote(noteId: string) {
+    await deleteNoteFirebase(noteId);
     setNotes((prevNotes) => prevNotes.filter((note) => note.noteId !== noteId));
-    setNotesToLocalStorage(notes.filter((note) => note.noteId !== noteId));
   }
 
   const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -138,6 +166,33 @@ export default function Home() {
       event.returnValue = "Unsaved Changes";
     }
   };
+
+  async function updateNoteTitleFirebase(noteTitle: string, noteId: string) {
+    await database
+      .ref(`users/${user?.id}/notes/${noteId}`)
+      .update({
+        title: noteTitle,
+        noteId: noteId,
+      })
+      .then(function () {
+        console.log("update succeeded.");
+      })
+      .catch(function (error) {
+        console.log("something went wrong: " + error.message);
+      });
+  }
+
+  async function deleteNoteFirebase(noteId: string) {
+    await database
+      .ref(`users/${user!.id}/notes/${noteId}`)
+      .remove()
+      .then(function () {
+        console.log("Remove succeeded.");
+      })
+      .catch(function (error) {
+        console.log("Remove failed: " + error.message);
+      });
+  }
 
   return (
     <>
@@ -185,14 +240,14 @@ export default function Home() {
             notes={notes}
             isSidebarOpen={isSidebarOpen}
             setIsSidebarOpen={setIsSidebarOpen}
-            // session={session}
+            session={user}
             unsavedChanges={unsavedChanges}
             handleCreateNote={handleCreateNote}
             handleDeleteNote={handleDeleteNote}
           />
           <main className="px-8 md:px-20 py-4 mt-10 md:mt-0">
             {isSidebarOpen && notes.length > 0 && (
-              <div className="select-none flex items-center gap-4 mt-2">
+              <div className="fixed top-0 pl-[20rem] left-0 pt-6 pb-6 w-full select-none flex items-center bg-zinc-800 z-[40]">
                 <div className="flex gap-2 items-center">
                   <FiFileText className="w-4 h-4 text-zinc-400" />
                   <span>{notes[currentSelectedNote]?.title}</span>
@@ -209,7 +264,7 @@ export default function Home() {
               <Editor
                 note={notes[currentSelectedNote]}
                 updateNoteContent={updateNoteContent}
-                // session={session}
+                session={user}
                 setUnsavedChanges={setUnsavedChanges}
                 updateNoteTitle={updateNoteTitle}
               />
@@ -220,22 +275,3 @@ export default function Home() {
     </>
   );
 }
-
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   const session = await getSession(context);
-
-//   // if (!session) {
-//   //   return {
-//   //     redirect: {
-//   //       destination: "/login",
-//   //       permanent: false,
-//   //     },
-//   //   };
-//   // }
-
-//   return {
-//     props: {
-//       // session,
-//     },
-//   };
-// };

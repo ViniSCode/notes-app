@@ -1,6 +1,7 @@
 "use client";
 import { Note } from "@/pages";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import Document from "@tiptap/extension-document";
 import Heading from "@tiptap/extension-heading";
 import Highlight from "@tiptap/extension-highlight";
 import Image from "@tiptap/extension-image";
@@ -27,7 +28,7 @@ interface Props {
   note: Note;
   updateNoteContent: any;
   setUnsavedChanges: (value: boolean) => void;
-  // session: Session;
+  session?: any;
   updateNoteTitle: any;
 }
 
@@ -36,13 +37,20 @@ lowlight.registerLanguage("css", css);
 lowlight.registerLanguage("js", js);
 lowlight.registerLanguage("ts", ts);
 
+const CustomDocument = Document.extend({
+  content: "heading block*",
+});
+
 function Editor(props: Props) {
   const [typingTimeout, setTypingTimeout] = useState<number | any>(undefined);
 
   const editor = useEditor({
     autofocus: "end",
     extensions: [
-      StarterKit,
+      CustomDocument,
+      StarterKit.configure({
+        document: false,
+      }),
       Heading.configure({
         levels: [1, 2, 3],
       }),
@@ -65,6 +73,7 @@ function Editor(props: Props) {
           return "Type something or Press '/' for commands...";
         },
         emptyNodeClass: "isNodeEmpty",
+        showOnlyCurrent: false,
       }),
       Highlight.configure({
         HTMLAttributes: {
@@ -85,13 +94,16 @@ function Editor(props: Props) {
       },
     },
     onUpdate: ({ editor }) => {
+      console.log(editor.getHTML());
+
       if (typingTimeout) {
         clearTimeout(typingTimeout);
       }
 
       const newTypingTimeout = setTimeout(async () => {
-        props.updateNoteContent(props.note.noteId, editor.getHTML());
-      }, 1000);
+        const firstH1Element = getFirstH1FromHTML(editor.getHTML());
+        props.updateNoteContent(editor.getHTML(), props.note, firstH1Element);
+      }, 2500);
 
       setTypingTimeout(newTypingTimeout);
 
@@ -100,11 +112,23 @@ function Editor(props: Props) {
     onBlur: ({ editor }) => {},
   });
 
+  function getFirstH1FromHTML(html: string) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+    const h1Element = doc.querySelector("h1");
+    h1Element?.classList.add("title");
+
+    if (h1Element) {
+      return h1Element.textContent;
+    } else {
+      return null;
+    }
+  }
+
   useEffect(() => {
     const handleKeyDown = (event: any) => {
       if ((event.ctrlKey || event.metaKey) && event.key === "s") {
         event.preventDefault();
-        // Optionally, you can display a message or perform some action here
       }
     };
 
@@ -121,30 +145,6 @@ function Editor(props: Props) {
 
   return (
     <>
-      {editor && (
-        <div className="max-w-[90vw] md:max-w-[50vw] min-h-fit mx-auto">
-          <input
-            type="text"
-            className="bg-transparent text-5xl font-normal focus:outline-none max-w-[90vw] md:max-w-[50vw] min-h-fit  mx-auto pt-16 selection:bg-blue-500/20"
-            placeholder="Untitled"
-            onChange={(e) =>
-              props.updateNoteTitle(props.note.noteId, e.target.value)
-            }
-            value={
-              !props.note.title
-                ? ""
-                : props.note.title === "Untitled"
-                ? ""
-                : props.note.title
-            }
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                editor.chain().focus().newlineInCode().run();
-              }
-            }}
-          />
-        </div>
-      )}
       <div
         className="w-full h-full min-h-screen min-w-full editor-container relative z-0"
         onClick={() => {
@@ -152,7 +152,7 @@ function Editor(props: Props) {
             const isText = editor.state.selection.$from.nodeBefore?.isText;
             if (isText && !editor.isFocused) {
               editor.chain().focus().selectTextblockEnd().run();
-              editor.chain().focus().setHardBreak().run();
+              // editor.chain().focus().setHardBreak().run();
             }
 
             editor.chain().focus().run();
@@ -161,7 +161,7 @@ function Editor(props: Props) {
       >
         <EditorContent
           editor={editor}
-          className="max-w-[90vw] mt-[1.25rem] md:max-w-[50vw] min-h-fit z-40 relative mx-auto prose prose-violet prose-pre:whitespace-pre-wrap prose-invert selection:bg-blue-500/20"
+          className="mt-20 max-w-[90vw] md:max-w-[50vw] min-h-fit z-40 relative mx-auto prose prose-violet prose-pre:whitespace-pre-wrap prose-invert selection:bg-blue-500/20"
         />
 
         {editor && (

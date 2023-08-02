@@ -11,7 +11,7 @@ interface SidebarProps {
   notes: Note[];
   setCurrentSelectedNote: any;
   currentSelectedNote: any;
-  // session: Session;
+  session?: any;
   unsavedChanges: boolean;
   handleCreateNote: any;
   handleDeleteNote: any;
@@ -23,7 +23,7 @@ export function Sidebar({
   notes,
   setCurrentSelectedNote,
   currentSelectedNote,
-  // session,
+  session,
   unsavedChanges,
   handleCreateNote,
   handleDeleteNote,
@@ -45,7 +45,7 @@ export function Sidebar({
     >
       <aside className="static w-[16rem] min-w-[16rem]">
         <div className="flex relative gap-4 group justify-between items-center">
-          <ProfileDropdown />
+          <ProfileDropdown session={session} />
 
           <FiChevronsLeft
             className="absolute right-6 top-[22px] w-7 h-7 text-zinc-400 hover:bg-zinc-700 rounded-sm p-0.5 cursor-pointer"
@@ -55,7 +55,9 @@ export function Sidebar({
         <div className="flex flex-col gap-0.5 px-2">
           {notes &&
             notes.map((note: Note, index: any) => (
-              <div
+              <motion.div
+                initial={{ opacity: 0, x: -50, animation: "ease" }}
+                animate={{ opacity: 1, x: 0, animation: "ease" }}
                 key={index}
                 onClick={() => {
                   if (!unsavedChanges) {
@@ -67,15 +69,17 @@ export function Sidebar({
                 className="select-none first:mt-6 data-[active=true]:bg-zinc-700 gap-2 flex justify-between items-center text-sm cursor-pointer bg-zinc-900 hover:bg-zinc-600 px-6 py-1 font-medium text-white rounded-sm transition-colors"
                 data-active={currentSelectedNote === index}
               >
-                <div className="flex gap-2 items-center">
-                  <FiFileText className="w-4 h-4 text-zinc-400" />
-                  <span>{note.title}</span>
+                <div className="flex gap-2 items-center overflow-hidden">
+                  <div>
+                    <FiFileText className="w-4 h-4 text-zinc-400" />
+                  </div>
+                  <span className="truncate block">{note.title}</span>
                 </div>
                 <DeleteDialog
                   handleDeleteNote={handleDeleteNote}
                   id={note.noteId}
                 />
-              </div>
+              </motion.div>
             ))}
 
           <div
