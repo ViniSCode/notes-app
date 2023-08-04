@@ -1,10 +1,11 @@
 "use client";
+import { storage } from "@/lib/firebase";
 import { Note } from "@/pages";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import Document from "@tiptap/extension-document";
 import Heading from "@tiptap/extension-heading";
 import Highlight from "@tiptap/extension-highlight";
-import Image from "@tiptap/extension-image";
+import { Image as TipTapImage } from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import {
@@ -22,7 +23,7 @@ import "highlight.js/styles/tokyo-night-dark.css";
 import { lowlight } from "lowlight";
 import { useEffect, useState } from "react";
 import { AccessibleFloatingMenu } from "../FloatingMenu";
-import EditorToggleGroup from "../ToggleGroup";
+import { EditorToggleGroup } from "../ToggleGroup";
 
 interface Props {
   note: Note;
@@ -51,6 +52,7 @@ function Editor(props: Props) {
       StarterKit.configure({
         document: false,
       }),
+      TipTapImage,
       Heading.configure({
         levels: [1, 2, 3],
       }),
@@ -80,22 +82,75 @@ function Editor(props: Props) {
           class: "bg-yellow-500/20 text-white",
         },
       }),
-      Image.configure({
-        inline: true,
-        HTMLAttributes: {
-          class: "",
-        },
-      }),
     ],
     content: props.note.content,
     editorProps: {
       attributes: {
         class: "outline-none",
       },
+      handleDrop: function (view, event, slice, moved) {
+        if (
+          !moved &&
+          event.dataTransfer &&
+          event.dataTransfer.files &&
+          event.dataTransfer.files[0]
+        ) {
+          let file = event.dataTransfer.files[0];
+          let filesize = Number((file.size / 1024 / 1024).toFixed(4));
+          if (
+            (file.type === "image/jpeg" || file.type === "image/png") &&
+            filesize < 10
+          ) {
+            let _URL = window.URL || window.webkitURL;
+            let img = new Image();
+            img.src = _URL.createObjectURL(file);
+
+            img.addEventListener("load", () => {});
+
+            img.onload = function () {
+              if (img.width > 5000 || img.height > 5000) {
+                window.alert(
+                  "Your images need to be less than 5000 pixels in height and width."
+                );
+              } else {
+                uploadImage(file)
+                  .then(function (response: any) {
+                    let image = new Image();
+                    image.src = response;
+                    image.onload = function () {
+                      const { schema } = view.state;
+                      const coordinates = view.posAtCoords({
+                        left: event.clientX,
+                        top: event.clientY,
+                      });
+                      const node = schema.nodes.image.create({ src: response });
+                      const transaction = view.state.tr.insert(
+                        coordinates!.pos,
+                        node
+                      );
+                      return view.dispatch(transaction);
+                    };
+                  })
+                  .catch(function (error: any) {
+                    if (error) {
+                      window.alert(
+                        "There was a problem uploading your image, please try again."
+                      );
+                    }
+                  });
+              }
+            };
+          } else {
+            window.alert(
+              "Images need to be in jpg or png format and less than 10mb in size."
+            );
+          }
+          return true;
+        }
+        return false;
+      },
     },
     onUpdate: ({ editor }) => {
-      console.log(editor.getHTML());
-
       if (typingTimeout) {
         clearTimeout(typingTimeout);
       }
@@ -143,6 +198,19 @@ function Editor(props: Props) {
     editor?.chain().setContent(props!.note!.content!).run();
   }, [props.note.content]);
 
+  async function uploadImage(file: File): Promise<string> {
+    try {
+      const storageRef = storage.ref().child(`images/${file.name}`);
+      const snapshot = await storageRef.put(file);
+      const downloadURL = await snapshot.ref.getDownloadURL();
+
+      return downloadURL;
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      throw error;
+    }
+  }
+
   return (
     <>
       <div
@@ -152,7 +220,6 @@ function Editor(props: Props) {
             const isText = editor.state.selection.$from.nodeBefore?.isText;
             if (isText && !editor.isFocused) {
               editor.chain().focus().selectTextblockEnd().run();
-              // editor.chain().focus().setHardBreak().run();
             }
 
             editor.chain().focus().run();
