@@ -30,3 +30,9 @@ body {
   pointer-events: none;
   font-weight: normal;
 }
+
+.ProseMirror img {
+  width: 100%;
+  border-radius: 0.3125rem;
+  margin: 1rem auto;
+}

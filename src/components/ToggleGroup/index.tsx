@@ -14,59 +14,62 @@ const toggleGroupItemClasses =
 interface EditorToggleGroupProps {
   editor: Editor;
 }
-const EditorToggleGroup = (props: EditorToggleGroupProps) => (
-  <ToggleGroup.Root
-    className="inline-flex bg-zinc-700 rounded shadow-[0_2px_10px] shadow-blackA7 space-x-px"
-    type="single"
-    defaultValue="center"
-    aria-label="Text alignment"
-  >
-    <ToggleGroup.Item
-      className={toggleGroupItemClasses}
-      value="highlight"
-      data-active={props.editor.isActive("highlight")}
-      onClick={() => props.editor.chain().focus().toggleHighlight().run()}
-    >
-      <TfiMarkerAlt className="w-5 h-5" />
-    </ToggleGroup.Item>
 
-    <ToggleGroup.Item
-      className={toggleGroupItemClasses}
-      value="bold"
-      onClick={() => props.editor.chain().focus().toggleBold().run()}
-      data-active={props.editor.isActive("bold")}
+export function EditorToggleGroup(props: EditorToggleGroupProps) {
+  const isContentImage =
+    props.editor.state.selection.$from.nodeBefore?.attrs?.src;
+  return (
+    <ToggleGroup.Root
+      className="inline-flex bg-zinc-700 rounded shadow-[0_2px_10px] shadow-blackA7 space-x-px"
+      type="single"
+      defaultValue="center"
+      aria-label="Text alignment"
     >
-      <RxFontBold className="w-5 h-5" />
-    </ToggleGroup.Item>
+      <ToggleGroup.Item
+        className={toggleGroupItemClasses}
+        value="highlight"
+        data-active={props.editor.isActive("highlight")}
+        onClick={() => props.editor.chain().focus().toggleHighlight().run()}
+      >
+        <TfiMarkerAlt className="w-5 h-5" />
+      </ToggleGroup.Item>
 
-    <ToggleGroup.Item
-      className={toggleGroupItemClasses}
-      value="italic"
-      onClick={() => props.editor.chain().focus().toggleItalic().run()}
-      data-active={props.editor.isActive("italic")}
-    >
-      <RxFontItalic className="w-5 h-5" />
-    </ToggleGroup.Item>
+      <ToggleGroup.Item
+        className={toggleGroupItemClasses}
+        value="bold"
+        onClick={() => props.editor.chain().focus().toggleBold().run()}
+        data-active={props.editor.isActive("bold")}
+      >
+        <RxFontBold className="w-5 h-5" />
+      </ToggleGroup.Item>
 
-    <ToggleGroup.Item
-      className={toggleGroupItemClasses}
-      value="strike"
-      onClick={() => props.editor.chain().focus().toggleStrike().run()}
-      data-active={props.editor.isActive("strike")}
-    >
-      <RxStrikethrough className="w-5 h-5" />
-    </ToggleGroup.Item>
+      <ToggleGroup.Item
+        className={toggleGroupItemClasses}
+        value="italic"
+        onClick={() => props.editor.chain().focus().toggleItalic().run()}
+        data-active={props.editor.isActive("italic")}
+      >
+        <RxFontItalic className="w-5 h-5" />
+      </ToggleGroup.Item>
 
-    <ToggleGroup.Item
-      className={toggleGroupItemClasses}
-      value="code"
-      aria-label="Left aligned"
-      data-active={props.editor.isActive("codeBlock")}
-      onClick={() => props.editor.chain().focus().toggleCodeBlock().run()}
-    >
-      <RxCode className="w-5 h-5" />
-    </ToggleGroup.Item>
-  </ToggleGroup.Root>
-);
+      <ToggleGroup.Item
+        className={toggleGroupItemClasses}
+        value="strike"
+        onClick={() => props.editor.chain().focus().toggleStrike().run()}
+        data-active={props.editor.isActive("strike")}
+      >
+        <RxStrikethrough className="w-5 h-5" />
+      </ToggleGroup.Item>
 
-export default EditorToggleGroup;
+      <ToggleGroup.Item
+        className={toggleGroupItemClasses}
+        value="code"
+        aria-label="Left aligned"
+        data-active={props.editor.isActive("codeBlock")}
+        onClick={() => props.editor.chain().focus().toggleCodeBlock().run()}
+      >
+        <RxCode className="w-5 h-5" />
+      </ToggleGroup.Item>
+    </ToggleGroup.Root>
+  );
+}
