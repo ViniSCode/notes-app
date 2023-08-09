@@ -5,7 +5,6 @@ import {
   RxFontBold,
   RxFontItalic,
   RxStrikethrough,
-  RxTrash,
 } from "react-icons/rx";
 import { TfiMarkerAlt } from "react-icons/tfi";
 
@@ -70,14 +69,6 @@ export function EditorToggleGroup(props: EditorToggleGroupProps) {
         onClick={() => props.editor.chain().focus().toggleCodeBlock().run()}
       >
         <RxCode className="w-5 h-5" />
-      </ToggleGroup.Item>
-
-      <ToggleGroup.Item
-        className={toggleGroupItemClasses}
-        value="delete"
-        onClick={() => props.editor.chain().focus().deleteSelection().run()}
-      >
-        <RxTrash className="w-5 h-5" />
       </ToggleGroup.Item>
     </ToggleGroup.Root>
   );

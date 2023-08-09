@@ -1,5 +1,4 @@
 import Editor from "@/components/Editor/index";
-import { Spinner } from "@/components/Loading/spinner";
 import { Sidebar } from "@/components/Sidebar";
 import { useAuth } from "@/hooks/useAuth";
 import { auth, database, firebase } from "@/lib/firebase";
@@ -25,18 +24,6 @@ export default function Home() {
   const [isInitialFetchComplete, setIsInitialFetchComplete] = useState(false);
 
   const router = useRouter();
-
-  useEffect(() => {
-    if (unsavedChanges) {
-      window.addEventListener("beforeunload", handleBeforeUnload);
-    } else {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    }
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [unsavedChanges]);
 
   useEffect(() => {
     if (currentSelectedNote >= notes.length && notes.length > 1) {
@@ -160,13 +147,6 @@ export default function Home() {
     setNotes((prevNotes) => prevNotes.filter((note) => note.noteId !== noteId));
   }
 
-  const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-    if (unsavedChanges) {
-      event.preventDefault();
-      event.returnValue = "Unsaved Changes";
-    }
-  };
-
   async function updateNoteTitleFirebase(noteTitle: string, noteId: string) {
     await database
       .ref(`users/${user?.id}/notes/${noteId}`)
@@ -222,13 +202,6 @@ export default function Home() {
                   <span>{notes[currentSelectedNote]?.title}</span>
                 </div>
               )}
-
-              {unsavedChanges && (
-                <div className="ml-8 flex items-center text-zinc-300">
-                  <Spinner />
-                  <span>Saving...</span>
-                </div>
-              )}
             </div>
           )}
 
@@ -252,12 +225,6 @@ export default function Home() {
                   <FiFileText className="w-4 h-4 text-zinc-400" />
                   <span>{notes[currentSelectedNote]?.title}</span>
                 </div>
-                {unsavedChanges && (
-                  <div className="ml-8 flex items-center text-zinc-300">
-                    <Spinner />
-                    <span>Saving...</span>
-                  </div>
-                )}
               </div>
             )}
             {notes && notes[currentSelectedNote] && (
@@ -265,6 +232,7 @@ export default function Home() {
                 note={notes[currentSelectedNote]}
                 updateNoteContent={updateNoteContent}
                 session={user}
+                unsavedChanges={unsavedChanges}
                 setUnsavedChanges={setUnsavedChanges}
                 updateNoteTitle={updateNoteTitle}
               />

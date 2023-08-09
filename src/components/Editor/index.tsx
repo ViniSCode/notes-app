@@ -22,6 +22,7 @@ import html from "highlight.js/lib/languages/xml";
 import "highlight.js/styles/tokyo-night-dark.css";
 import { lowlight } from "lowlight";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { AccessibleFloatingMenu } from "../FloatingMenu";
 import { EditorToggleGroup } from "../ToggleGroup";
 
@@ -31,6 +32,7 @@ interface Props {
   setUnsavedChanges: (value: boolean) => void;
   session?: any;
   updateNoteTitle: any;
+  unsavedChanges: boolean;
 }
 
 lowlight.registerLanguage("html", html);
@@ -44,6 +46,32 @@ const CustomDocument = Document.extend({
 
 function Editor(props: Props) {
   const [typingTimeout, setTypingTimeout] = useState<number | any>(undefined);
+
+  useEffect(() => {
+    if (props.unsavedChanges) {
+      window.addEventListener("beforeunload", handleBeforeUnload);
+    } else {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    }
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [props.unsavedChanges]);
+
+  const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+    if (props.unsavedChanges && editor) {
+      if (typingTimeout) {
+        clearTimeout(typingTimeout);
+      }
+
+      const firstH1Element = getFirstH1FromHTML(editor.getHTML());
+      props.updateNoteContent(editor.getHTML(), props.note, firstH1Element);
+
+      event.preventDefault();
+      event.returnValue = "Unsaved Changes";
+    }
+  };
 
   const editor = useEditor({
     autofocus: "end",
@@ -158,7 +186,7 @@ function Editor(props: Props) {
       const newTypingTimeout = setTimeout(async () => {
         const firstH1Element = getFirstH1FromHTML(editor.getHTML());
         props.updateNoteContent(editor.getHTML(), props.note, firstH1Element);
-      }, 2500);
+      }, 20000);
 
       setTypingTimeout(newTypingTimeout);
 
@@ -184,6 +212,18 @@ function Editor(props: Props) {
     const handleKeyDown = (event: any) => {
       if ((event.ctrlKey || event.metaKey) && event.key === "s") {
         event.preventDefault();
+
+        if (props.unsavedChanges && editor) {
+          if (typingTimeout) {
+            clearTimeout(typingTimeout);
+          }
+
+          const firstH1Element = getFirstH1FromHTML(editor.getHTML());
+          props.updateNoteContent(editor.getHTML(), props.note, firstH1Element);
+          toast.success("Saved", {
+            autoClose: 2000,
+          });
+        }
       }
     };
 
@@ -192,7 +232,7 @@ function Editor(props: Props) {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [props.unsavedChanges]);
 
   useEffect(() => {
     editor?.chain().setContent(props!.note!.content!).run();
@@ -228,7 +268,7 @@ function Editor(props: Props) {
       >
         <EditorContent
           editor={editor}
-          className="mt-20 max-w-[90vw] md:max-w-[50vw] min-h-fit z-40 relative mx-auto prose prose-violet prose-pre:whitespace-pre-wrap prose-invert selection:bg-blue-500/20"
+          className="mt-32 max-w-[90vw] md:max-w-[50vw] min-h-fit z-40 relative mx-auto prose prose-violet prose-pre:whitespace-pre-wrap prose-invert selection:bg-blue-500/20"
         />
 
         {editor && (
